@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/admin/Documents/Github/C++/CS260/Lab 1/ArrayInt.cpp" "C:/Users/admin/Documents/Github/C++/CS260/Lab 1/cmake-build-debug/CMakeFiles/Lab_1.dir/ArrayInt.cpp.obj"
-  "C:/Users/admin/Documents/Github/C++/CS260/Lab 1/main.cpp" "C:/Users/admin/Documents/Github/C++/CS260/Lab 1/cmake-build-debug/CMakeFiles/Lab_1.dir/main.cpp.obj"
+  "C:/Users/admin/Documents/Github/C++/CS260/Lab 1 - Arrays Abstract Data Structure/ArrayInt.cpp" "C:/Users/admin/Documents/Github/C++/CS260/Lab 1 - Arrays Abstract Data Structure/cmake-build-debug/CMakeFiles/Lab_1.dir/ArrayInt.cpp.obj"
+  "C:/Users/admin/Documents/Github/C++/CS260/Lab 1 - Arrays Abstract Data Structure/main.cpp" "C:/Users/admin/Documents/Github/C++/CS260/Lab 1 - Arrays Abstract Data Structure/cmake-build-debug/CMakeFiles/Lab_1.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -10,8 +10,6 @@
 #include <iostream>
 #include <sstream>
 
-using namespace std;
-
 class ArrayInt
 {
 
@@ -25,9 +23,9 @@ public:
 
     ArrayInt();
 
-    ArrayInt(uint32_t size);
+    explicit ArrayInt(uint32_t size);
 
-    uint32_t getSize();
+    uint32_t getSize() const;
 
     void resize(uint32_t s);
 
@@ -37,7 +35,7 @@ public:
 
     void deleteLast();
 
-    string listElements();
+    std::string listElements();
 
     void insertAt(int ind, int val);
 
