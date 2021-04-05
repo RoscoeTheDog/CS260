@@ -19,7 +19,7 @@ ArrayInt::ArrayInt(uint32_t size)
     this->arr = new int32_t[this->size];
 }
 
-uint32_t ArrayInt::getSize()
+uint32_t ArrayInt::getSize() const
 {
     return this->size;
 }
@@ -58,7 +58,8 @@ void ArrayInt::append(int32_t v)
 int32_t ArrayInt::getLast()
 {
     if (this->length < 1)
-        throw std::out_of_range("IndexError");
+        throw std::out_of_range
+        ("IndexError");
     else
         return this->arr[this->length - 1];
 
@@ -67,13 +68,14 @@ int32_t ArrayInt::getLast()
 void ArrayInt::deleteLast()
 {
     if (this->length < 1)
-        throw std::out_of_range("IndexError");
+        throw std::out_of_range
+        ("IndexError");
     this->length -= 1;
 }
 
-string ArrayInt::listElements()
+std::string ArrayInt::listElements()
 {
-    stringstream S;
+    std::stringstream S;
 
     if (this->length == 0)
         return "Empty Array";
@@ -88,7 +90,7 @@ string ArrayInt::listElements()
 void ArrayInt::insertAt(int ind, int val)
 {
     if (ind < 0 || ind > this->length || ind > this->size){
-        throw out_of_range("IndexError");
+        throw std::out_of_range("IndexError");
     }
     if (this->length == this->size) {
         resize(this->size * 2);
@@ -116,7 +118,8 @@ void ArrayInt::insertAt(int ind, int val)
 void ArrayInt::removeAt(int ind)
 {
     if (ind < 0 || ind > this->length || ind > this->size){
-        throw out_of_range("IndexError");
+        throw std::out_of_range
+        ("IndexError");
         return;
     }
 
@@ -163,10 +166,11 @@ bool ArrayInt::findRemove(int val)
 
 int ArrayInt::findLargest()
 {
-    int32_t largest = numeric_limits<int32_t>::min();
+    int32_t largest = std::numeric_limits<int32_t>::min();
 
     if (this->length < 1)
-        throw out_of_range("IndexError");
+        throw std::out_of_range
+        ("IndexError");
 
     for (unsigned i = 0; i < this->length; ++i) {
         if (this->arr[i] > largest)
@@ -186,7 +190,8 @@ void ArrayInt::removeLargest()
 void ArrayInt::setAt(int32_t ind, int val)
 {
     if (ind > this->size)
-        throw out_of_range("IndexError");
+        throw std::out_of_range
+        ("IndexError");
 
     // overwrite a previous value. this is a destructive set. do not insert or expand.
     this->arr[ind] = val;
@@ -209,7 +214,8 @@ void ArrayInt::setAt(int32_t ind, int val)
 int ArrayInt::getAt(uint32_t ind)
 {
     if (ind > this->length)
-        throw out_of_range("IndexError");
+        throw std::out_of_range
+        ("IndexError");
 
     return this->arr[ind];
 }
