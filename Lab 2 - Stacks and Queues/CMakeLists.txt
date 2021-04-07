@@ -3,4 +3,4 @@ project(Lab_2___Stacks_and_Queues)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Lab_2___Stacks_and_Queues main.cpp FIFO.cpp FIFO.h)
+add_executable(Lab_2___Stacks_and_Queues main.cpp Queue.cpp Queue.h)
