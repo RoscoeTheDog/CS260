@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
-project(Lab_2___Stacks_and_Queues)
+project(untitled)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Lab_2___Stacks_and_Queues main.cpp Queue.cpp Queue.h)
+add_executable(untitled main.cpp Deque.h Deque.cpp)

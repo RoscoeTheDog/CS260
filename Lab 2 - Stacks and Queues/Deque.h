@@ -2,13 +2,13 @@
 // Created by admin on 4/6/2021.
 //
 
-#ifndef LAB_2___STACKS_AND_QUEUES_QUEUE_H
-#define LAB_2___STACKS_AND_QUEUES_QUEUE_H
+#ifndef LAB_2___STACKS_AND_QUEUES_DEQUEUE_H
+#define LAB_2___STACKS_AND_QUEUES_DEQUEUE_H
 #include <cstdint>
 #include <stdexcept>
 #include <sstream>
 
-class Queue
+class Deque
 {
 private:
      int32_t * arr;
@@ -21,11 +21,11 @@ private:
 
 public:
 
-    Queue() { arr = new int32_t[size]; }
+    Deque() { arr = new int32_t[size]; }
 
-    Queue(uint32_t n) { arr = new int32_t[n < 1 ? size = 10 : size = n]; }
+    Deque(uint32_t n) { arr = new int32_t[n < 1 ? size = 10 : size = n]; }
 
-    ~Queue() { delete arr; }
+    ~Deque() { delete arr; }
 
     void addHead(int32_t val);
 
@@ -37,6 +37,8 @@ public:
 
     void resize(uint32_t size);
 
+    bool isEmpty() const{ return length; };
+
     std::string listQueue();
 
     std::string dumpArray();
@@ -44,4 +46,4 @@ public:
 };
 
 
-#endif //LAB_2___STACKS_AND_QUEUES_QUEUE_H
+#endif //LAB_2___STACKS_AND_QUEUES_DEQUEUE_H
