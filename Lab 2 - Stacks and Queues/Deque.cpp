@@ -4,6 +4,10 @@
 
 #include "Deque.h"
 
+#define RESIZE1
+//#define RESIZE2
+//#define RESIZE3
+
 void Deque::addHead(int32_t val)
 {
     // catch full queue
@@ -121,15 +125,20 @@ void Deque::resize(uint32_t size)
     int32_t * temp;
     temp = new int32_t[size];
 
+#ifdef RESIZE1
     // Algo 1 - Jim's (instructor) method. Clean, easy to read. re-uses code. Works when wrapped or unwrapped. I like the simplicity.
     // calling removeHead() modifies length so save it ahead of time.
     uint32_t l = length;
-    for (int i = 0; i < this->size; ++i) {
+    for (unsigned i = 0; i < l; ++i) {
         temp[i] = removeHead();
     }
     // Restore length count after removing head elements.
     length = l;
+    head = -1;
+    tail = length;
+#endif
 
+#ifdef RESIZE2
     // Algo 2 - Copy Head to end of array then copy 0 : tail.
     // David came up with this while we were discussing stuff
     // Solid but breaks when copying unwrapped arrays so I added a little logic check for that.
@@ -152,11 +161,17 @@ void Deque::resize(uint32_t size)
         head = size - 1;    // this becomes 0 if doing pre-increment method for the head. I am not in this scenario.
         tail = length;
     }
-    else
+    else{
         // we can just do a quick deep copy if not wrapped (assuming it starts from 0)
         memcpy(temp, arr, sizeof(int32_t) * static_cast<int32_t>(length));
 
+        head = size - 1;
+        tail = this->size;
+    }
 
+#endif
+
+#ifdef RESIZE3
     // Algo #3 -- a new way I came up with after thinking of a fastest-possible solution. Simple deep copy, then append missing 0 : tail.
     if (WRAPPED) {
 
@@ -177,6 +192,7 @@ void Deque::resize(uint32_t size)
     }
     else    // Don't move head/tail and simple deep copy if not wrapped.
         memcpy(temp, arr, sizeof(int32_t) * static_cast<int32_t>(this->size));
+#endif
 
     // cleanup
     delete arr;

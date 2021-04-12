@@ -38,7 +38,7 @@ public:
 
     void resize(uint32_t size);
 
-    bool isEmpty() const{ return length; };
+    bool isEmpty() { return !length; };
 
     std::string listQueue();
 
