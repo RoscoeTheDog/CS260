@@ -4,24 +4,37 @@
 
 #include "Deque.h"
 
+
+#define RESIZE1
+//#define RESIZE2
+//#define RESIZE3
+
 void Deque::addHead(int32_t val)
 {
+    // catch full queue
     if (length == size)
         resize(size*2);
-    if (head > static_cast<int32_t>(size) - 1)
+    // catch wraps
+    if (head > static_cast<int32_t>(size) - 1)          // unwrap
+    {
         head = 0;
-    if (head < 0)
+        WRAPPED = false;
+    }
+    if (head < 0)                                       // wrap
+    {
         head = size - 1;
-
-    arr[head--] = val;
+        WRAPPED = true;
+    }
 
     /*
      *  For Post increment implementation, check special case where
      *  cursors are initialized at aligned index (0) but length is null.
      *
-     *  Both cursors would have to move on the initial insert to avoid overwriting.
+     *  Both cursors would have to be move upon the first insert to avoid overwriting data
      *
     */
+    arr[head--] = val;
+
     if (head + 1 == tail && length == 0)
         tail++;
 
@@ -30,6 +43,11 @@ void Deque::addHead(int32_t val)
 
 void Deque::addTail(int32_t val)
 {
+    if (head < 0)
+    {
+        head = size - 1;
+        WRAPPED = true;
+    }
     if (length == size)
         resize(size*2);
     if (tail > static_cast<int32_t>(size) - 1)
@@ -41,9 +59,10 @@ void Deque::addTail(int32_t val)
      *  For Post increment implementation, check special case where
      *  cursors are initialized at aligned index (0) but length is null.
      *
-     *  Both cursors would have to be move upon the initial insert to avoid overwriting data
+     *  Both cursors would have to be move upon the first insert to avoid overwriting data
      *
     */
+    arr[tail++] = val;
 
     if (head == tail - 1 && length == 0)
         head--;
@@ -53,41 +72,43 @@ void Deque::addTail(int32_t val)
 
 int Deque::removeHead()
 {
+    // validate
     if (!length)
         throw std::out_of_range("Deque is Empty");
-    // Pre-validate and check for wraps.
-    if (head > static_cast<int32_t>(size) - 1 )    // unwrap
+    // catch wraps
+    if (head > static_cast<int32_t>(size) - 1 )     // unwrap
         head = 0;
-    if (head < 0)           // wrap
+    if (head < 0)                                   // wrap
         head = size - 1;
 
+    // This essentially performs a 'look ahead'. I have to do this in order to keep the 'post-increment' behavior.
+    // doing return[++head] is 5 less lines of code, so pre-increment really works much better here.
     int32_t v;
-
-    // This essentially does a 'look ahead'. I have to do this in order for 'post-increment' to actually work.
-    // doing return[++head] is 5 less lines of code so pre-increment works so much better here.
-    if (head + 1 > static_cast<int32_t>(size) - 1)  // also this cast is dumb, but necessary.
+    if (head + 1 > static_cast<int32_t>(size) - 1)
         v = arr[0];
     else
         v = arr[head + 1];
 
     length--;
     head++;
+
     return v;
 }
 
 int Deque::removeTail()
 {
+    // validate
     if (!length)
         throw std::out_of_range("Deque is Empty");
-    if (tail > static_cast<int32_t>(size) - 1)
+    // catch wraps
+    if (tail > static_cast<int32_t>(size) - 1)          // wrap
         tail = 0;
-    if (tail < 0)
+    if (tail < 0)                                       // unwrap
         tail = size - 1;
 
+    // This essentially performs a 'look ahead'. I have to do this in order to keep the 'post-increment' behavior.
+    // doing return[--tail] is 5 less lines of code, so pre-increment really works much better here.
     int32_t v;
-
-    // This essentially does a 'look ahead'. I have to do this in order for 'post-increment' to actually work.
-    // doing return[++head] is 5 less lines of code so pre-increment works so much better here.
     if (tail - 1 < 0)
         v = arr[size - 1];
     else
@@ -95,54 +116,35 @@ int Deque::removeTail()
 
     length--;
     tail--;
+
     return v;
 }
 
 void Deque::resize(uint32_t size)
 {
-
-    /*
-     *  For this I stuck with Post-incrementation since that was what I had started with at the beginning of this lab.
-     *  It has been discussed during lectures that using a mix of pre/post incrementation makes the indexing a little easier.     *
-     *
-     *  I spent time brainstorming with David (student) on this issue for a few hours. Ultimately, Jim's (instructor)
-     *  method of calling removeHead() was probably the cleanest and most preferred way of copying data which he revealed later.
-     *
-     *  See included screenshot for other method concepts. Note that this is just to show that
-     *  the work had been done prior and that there were thoughts put into our own solutions.
-     *
-     *  The best performing final solution would probably be using a combination of pre/post increments and the memcpy() function.
-     *  Otherwise you are left with using iterative deep copy, awkward pointer arithmetic, or a combination of both.
-     *
-     */
     int32_t * temp;
     temp = new int32_t[size];
 
-    uint32_t l = length; // removeHead() modifies length so save it ahead of time.
-    // Jim's way. Clean, easy to read. re-uses code. I like this method most.
-    for (int i = 0; i < this->size; ++i) {
+#ifdef RESIZE1
+    // Algo 1 - Jim's (instructor) method. Clean, easy to read. re-uses code. Works when wrapped or unwrapped. I like the simplicity.
+    // calling removeHead() modifies length so save it ahead of time.
+    uint32_t l = length;
+    for (unsigned i = 0; i < l; ++i) {
         temp[i] = removeHead();
     }
-
-    // Restore length after removing head elements.
+    // Restore length count after removing head elements.
     length = l;
+    head = -1;
+    tail = length;
+#endif
 
-    /// removeHead() OR memcpy()  ///
-    /*
-     * might be a little faster if not wrapped just to copy since it is non-interative.
-     *
-     * first check if array is wrapped or not.
-     *
-     * arr will be wrapped if head is larger than tail in most cases.
-     * When using post-increment for head/tail, they actually cross indexes when the array is full so this becomes untrue.
-     */
-    int j = 0;
-
-    // David came up with this other unwrapping solution while we were brainstorming.
-    // Seemed really solid but breaks when copying unwrapped arrays so I added a little logic check for that.
-    if (head <= tail && length != 0 ||
-        head > tail && length == this->size - 1) {
-
+#ifdef RESIZE2
+    // Algo 2 - Copy Head to end of array then copy 0 : tail.
+    // David came up with this while we were discussing stuff
+    // Solid but breaks when copying unwrapped arrays so I added a little logic check for that.
+    if (WRAPPED) {
+      
+        int j = 0;
         // unwrap starting from head to end.
         for (int i = head + 1; i < this->size; ++i){
             temp[j] = arr[i];
@@ -155,18 +157,47 @@ void Deque::resize(uint32_t size)
             ++j;
         }
 
-        head = size - 1;    // this becomes 0 if doing pre-increment method for head. I am not in this case.
+        head = size - 1;    // this becomes 0 if doing pre-increment method for the head. I am not in this scenario.
         tail = length;
     }
-    else
-        // we can just do a 1:1 copy for the array's length if not wrapped.
+    else{
+        // we can just do a quick deep copy if not wrapped (assuming it starts from 0)
         memcpy(temp, arr, sizeof(int32_t) * static_cast<int32_t>(length));
 
-    // cleanup after resize is done.
+        head = size - 1;
+        tail = this->size;
+    }
+
+#endif
+
+#ifdef RESIZE3
+    // Algo #3 -- a new way I came up with after thinking of a fastest-possible solution. Simple deep copy, then append missing 0 : tail.
+    if (WRAPPED) {
+
+        // copy wrapped arr
+        memcpy(temp, arr, sizeof(int32_t) * static_cast<int32_t>(this->size));
+
+        // always start up to tail.
+        int k = 0;
+
+        // this will be the new location af the tail (i.e head + length as if it weren't 0 indexed)
+        tail = (head + 1) + length;
+
+        // append the missing 0 - tail to the end of the copied array.
+        for(unsigned i = this->size; i < tail; ++i) {
+            temp[i] = arr[k];
+            k++;
+        }
+    }
+    else    // Don't move head/tail and simple deep copy if not wrapped.
+        memcpy(temp, arr, sizeof(int32_t) * static_cast<int32_t>(this->size));
+#endif
+
+    // cleanup
     delete arr;
     arr = temp;
 
-    // finally update the size before exit.
+    // finally update size before exit.
     this->size = size;
 }
 
@@ -178,21 +209,23 @@ std::string Deque::listQueue()
 
     /*
      *
-     *  No matter what it will always be O(n) to return a list of all elements in order.
+     *  No matter what, this will always be O(n) to return a list of all elements in order.
      *
-     *  So I might as well just copy the array 1:1 and then pop it off one at a time, deleting copy after.
-     *  However, you could also iter through head : size and 0 : tail-1 to do the same thing.
+     *  So I might as well just copy the array 1:1 and then pop it off one at a time, deleting the copy after.
+     *  Alternatively, could  iterate through head : size and 0 : tail to do the same thing but that's more code.
      *
-     *  Copying/popping temporarily duplicates memory but saves a lot of code.
-     *  Peaking elements and adding logic checks for bounds adds a lot of code, but saves memory.
+     *  simple copy/pop duplicates the memory used temporarily, but doesn't require as much code.
+     *  Peaking elements and adding logic checks for bounds adds a lot of code, but saves memory from the simpler method.
      *
-     *  It's a tradeoff.
+     *  So it is a tradeoff.
      *
-     *  See resize for the more 'fun' ways of doing this :)
+     *  See Deque::resize(). I added basically included all other methods of doing this there.
      *
      */
 
-    memcpy(copy, arr, sizeof(int32_t) * size); // just assume it's wrapped (i.e copy all bytes).
+    // just assume this is wrapped (i.e copy full size bytes instead of just length).
+    memcpy(copy, arr, sizeof(int32_t) * size);
+
 
     // Save these ahead of time
     uint32_t l = length;
@@ -202,11 +235,12 @@ std::string Deque::listQueue()
     for (uint32_t i = 0; i < l; ++i)
         S << removeHead() << " ";
 
-    // Restore these
+    // Restore these after popping.
     length = l;
     tail = t;
     head = h;
 
+    // Cleanup
     delete arr;
     arr = copy;
 
@@ -215,6 +249,8 @@ std::string Deque::listQueue()
 
 std::string Deque::dumpArray()
 {
+    // Depending on the algo used, dumpArray may not reflect the results from the driver correctly.
+    // --but the Deque will still be behaving as it should relative to the head/tail.
     std::stringstream S;
 
     for (uint32_t i = 0; i < size; ++i)

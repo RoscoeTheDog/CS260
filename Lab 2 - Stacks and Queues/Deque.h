@@ -18,6 +18,8 @@ private:
      int32_t tail = 0;
      uint32_t length = 0;
      uint32_t size = 20;
+     bool WRAPPED = false;
+
 
 public:
 
@@ -37,7 +39,7 @@ public:
 
     void resize(uint32_t size);
 
-    bool isEmpty() const{ return length; };
+    bool isEmpty() { return !length; };
 
     std::string listQueue();
 
