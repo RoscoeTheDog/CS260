@@ -20,6 +20,7 @@ private:
      uint32_t size = 20;
      bool WRAPPED = false;
 
+
 public:
 
     Deque() { arr = new int32_t[size]; }

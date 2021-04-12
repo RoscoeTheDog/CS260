@@ -4,6 +4,7 @@
 
 #include "Deque.h"
 
+
 #define RESIZE1
 //#define RESIZE2
 //#define RESIZE3
@@ -52,6 +53,8 @@ void Deque::addTail(int32_t val)
     if (tail > static_cast<int32_t>(size) - 1)
         tail = 0;
 
+    arr[tail++] = val;
+
     /*
      *  For Post increment implementation, check special case where
      *  cursors are initialized at aligned index (0) but length is null.
@@ -81,7 +84,6 @@ int Deque::removeHead()
     // This essentially performs a 'look ahead'. I have to do this in order to keep the 'post-increment' behavior.
     // doing return[++head] is 5 less lines of code, so pre-increment really works much better here.
     int32_t v;
-
     if (head + 1 > static_cast<int32_t>(size) - 1)
         v = arr[0];
     else
@@ -104,11 +106,9 @@ int Deque::removeTail()
     if (tail < 0)                                       // unwrap
         tail = size - 1;
 
-
     // This essentially performs a 'look ahead'. I have to do this in order to keep the 'post-increment' behavior.
     // doing return[--tail] is 5 less lines of code, so pre-increment really works much better here.
     int32_t v;
-
     if (tail - 1 < 0)
         v = arr[size - 1];
     else
@@ -143,9 +143,8 @@ void Deque::resize(uint32_t size)
     // David came up with this while we were discussing stuff
     // Solid but breaks when copying unwrapped arrays so I added a little logic check for that.
     if (WRAPPED) {
-
+      
         int j = 0;
-
         // unwrap starting from head to end.
         for (int i = head + 1; i < this->size; ++i){
             temp[j] = arr[i];
@@ -226,6 +225,7 @@ std::string Deque::listQueue()
 
     // just assume this is wrapped (i.e copy full size bytes instead of just length).
     memcpy(copy, arr, sizeof(int32_t) * size);
+
 
     // Save these ahead of time
     uint32_t l = length;
