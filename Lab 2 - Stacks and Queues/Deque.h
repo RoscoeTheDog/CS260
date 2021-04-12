@@ -18,6 +18,7 @@ private:
      int32_t tail = 0;
      uint32_t length = 0;
      uint32_t size = 20;
+     bool WRAPPED = false;
 
 public:
 
