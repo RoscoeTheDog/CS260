@@ -25,6 +25,8 @@ public:
 
     explicit ArrayInt(uint32_t size);
 
+    ~ArrayInt() { delete arr; };
+
     uint32_t getSize() const;
 
     void resize(uint32_t s);
