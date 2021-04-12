@@ -27,6 +27,8 @@ uint32_t ArrayInt::getSize() const
 void ArrayInt::resize(uint32_t s)
 {
     if (s > this->size){
+        int32_t * arrNew;
+
         arrNew = new int32_t[s];
 
         // Copy.
@@ -34,7 +36,10 @@ void ArrayInt::resize(uint32_t s)
             arrNew[i] = this->arr[i];
         }
 
+        delete [] this->arr;
         this->arr = arrNew;
+
+        this->size = s;
     }
 
 }
