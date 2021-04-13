@@ -110,7 +110,7 @@ void ArrayInt::insertAt(int ind, int val)
         temp[i] = this->arr[i - 1];
     }
 
-    delete this->arr;
+    delete[] this->arr;
     this->arr = temp;
 
     this->length++;
@@ -150,10 +150,8 @@ bool ArrayInt::findRemove(int val)
 
     // find index
     for (int i = 0; i < this->size; ++i) {
-        if (arr[i] == val){
+        if (arr[i] == val)
             ind = i;
-            break;
-        }
     }
 
     // perform remove
