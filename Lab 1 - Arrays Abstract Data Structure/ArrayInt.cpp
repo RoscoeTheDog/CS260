@@ -93,7 +93,7 @@ void ArrayInt::insertAt(int ind, int val)
     if (ind < 0 || ind > this->length || ind > this->size){
         throw std::out_of_range("IndexError");
     }
-    if (this->length == this->size) {
+    if (this->length >= this->size) {
         resize(this->size * 2);
     }
 
@@ -102,13 +102,12 @@ void ArrayInt::insertAt(int ind, int val)
     // deep copy arr
     memcpy(temp, this->arr, sizeof(int32_t) * this->size);
 
+    // shift everything else up relative to +1 right of the insert location
+    for (int i = ind + 1; i < static_cast<int32_t>(this->length) + 1; ++i)
+        temp[i] = this->arr[i - 1];
+
     // perform the insert
     temp[ind] = val;
-
-    // shift everything else up relative to +1 right of the insert location
-    for (int i = ind + 1; i < this->length + 1; ++i) {
-        temp[i] = this->arr[i - 1];
-    }
 
     delete[] this->arr;
     this->arr = temp;
