@@ -16,6 +16,6 @@ public:
 
     Node() { head = nullptr; next = nullptr; }
 
-    ~Node() { delete head; delete next; }
+    ~Node()= default;
 
 };

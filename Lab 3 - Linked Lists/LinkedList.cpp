@@ -6,44 +6,65 @@
 
 void LinkedList::addHead(char32_t value)
 {
-    Node * tmp_h = new Node;
+    Node *tmp_h = new Node;
+    tmp_h->value = value;
 
-    if (!this->head){
+    if (!this->head)
+    {
         this->head = tmp_h;
         this->tail = tmp_h;
     }
-    else{
+    else
+    {
         this->head->head = tmp_h;
         tmp_h->next = this->head;
+        this->head = tmp_h;
     }
 
 }
 
-void LinkedList::findNext(char32_t value)
+bool LinkedList::findNext(char32_t value)
 {
-    Node * workingNode = this->lastNode;
+    Node *workingNode = this->lastNode;
 
-    while(workingNode){
+    if (workingNode)
+        workingNode = workingNode->next;
+    else
+        workingNode = this->head;
 
-        if(workingNode->value.value() == value) {
+    while (workingNode)
+    {
+
+        if (workingNode->value.value() == value)
+        {
             this->lastNode = workingNode;
-            break;
+            return true;
         }
 
         workingNode = workingNode->next;
+
     }
+
+    this->lastNode = nullptr;
+
+    return false;
 }
 
 void LinkedList::addTail(char32_t value)
 {
-    Node * tmp_n = new Node;
+    Node *tmp_n = new Node;
+    tmp_n->value = value;
 
-    if(!tail){
+    if (!tail)
+    {
         this->tail = tmp_n;
-        this->head = tmp_n;
+        if (!head)
+            this->head = tmp_n;
     }
-    else{
-        this->tail->next = tmp_n;
+    else
+    {
+        if (tail)
+            this->tail->next = tmp_n;
         tmp_n->head = this->tail;
         this->tail = tmp_n;
     }
@@ -55,32 +76,35 @@ void LinkedList::removeHead()
     if (!this->head)
         throw std::out_of_range("Linked list is empty");
 
-    Node * tmp_n = this->head->next;
+    Node *tmp_n = this->head->next;
 
     delete this->head;
     this->head = tmp_n;
-    this->head->head = nullptr;
+    if (this->head)
+        this->head->head = nullptr;
 }
 
 void LinkedList::removeTail()
 {
-    if(!this->tail)
+    if (!this->tail)
         throw std::out_of_range("Linked list is empty");
 
-    Node * tmp_n = this->tail->head;
+    Node *tmp_n = this->tail->head;
 
     delete this->tail;
     this->tail = tmp_n;
-    this->tail->next = nullptr;
+    if (tail)
+        this->tail->next = nullptr;
 }
 
 bool LinkedList::find(char32_t value)
 {
-    Node * workingNode = this->head;
+    Node *workingNode = this->head;
 
-    while(workingNode){
+    while (workingNode)
+    {
 
-        if(workingNode->value.value() == value)
+        if (workingNode->value == value)
             return true;
 
         workingNode = workingNode->next;
@@ -91,22 +115,26 @@ bool LinkedList::find(char32_t value)
 
 bool LinkedList::findRemove(char32_t value)
 {
-    Node * workingNode = this->head;
-    Node * workingHead;
-    Node * workingNext;
+    Node *workingNode = this->head;
+    Node *workingHead = nullptr;
+    Node *workingNext = nullptr;
 
-    while(workingNode){
+    while (workingNode)
+    {
 
-        if(workingNode->value.value() == value){
+        if (workingNode->value.value() == value)
+        {
             workingHead = workingNode->head;
             workingNext = workingNode->next;
-            if(this->head == workingNode)
+            if (this->head == workingNode)
                 this->head = workingNext;
-            if(this->tail == workingNode)
+            if (this->tail == workingNode)
                 this->tail = workingHead;
             delete workingNode;
-            workingHead->next = workingNext;
-            workingNext->head = workingHead;
+            if (workingHead)
+                workingHead->next = workingNext;
+            if (workingNext)
+                workingNext->head = workingHead;
             return true;
         }
 
@@ -116,15 +144,17 @@ bool LinkedList::findRemove(char32_t value)
     return false;
 }
 
-std::string LinkedList::displayList(char32_t c)
+std::string LinkedList::displayList()
 {
     std::stringstream S;
-    Node * workingNode = this->head;
+    Node *workingNode = this->head;
 
-    while(workingNode){
+    while (workingNode)
+    {
 
-        if(workingNode->value){
-            S << workingNode->value.value();
+        if (workingNode->value.value())
+        {
+            S << static_cast<char>(workingNode->value.value());
         }
 
         workingNode = workingNode->next;
@@ -135,16 +165,27 @@ std::string LinkedList::displayList(char32_t c)
 
 void LinkedList::removeLast()
 {
-    Node * workingHead;
-    Node * workingNext;
+    if (this->lastNode)
+    {
 
-    if(this->lastNode) {
-        workingHead = this->lastNode->head;
-        workingNext = this->lastNode->next;
-        if (this->head == workingHead)
-            this->head = workingNext;
-        if (this->tail == workingNext)
-            this->tail = workingHead;
+        if (this->head == this->lastNode)
+        {
+            this->head = this->head->next;
+            this->head->head = nullptr;
+        }
+
+        if (this->tail == this->lastNode)
+        {
+            this->tail = this->tail->head;
+            this->tail->next = nullptr;
+        }
+
+        if (this->lastNode->head && this->lastNode->next)
+        {
+            this->lastNode->head->next = this->lastNode->next;
+            this->lastNode->next->head = this->lastNode->head;
+        }
+
         delete this->lastNode;
         this->lastNode = nullptr;
     }
@@ -153,11 +194,58 @@ void LinkedList::removeLast()
 
 void LinkedList::insertLast(char32_t value)
 {
-    if(this->lastNode){
-        Node * tmp_n = new Node;
+    if (this->lastNode)
+    {
+        Node *tmp_n = new Node;
+        tmp_n->value = value;
 
-        tmp_n->head = this->lastNode->head;
-        tmp_n->next = this->lastNode;
-        this->lastNode->head = tmp_n;
+        if (this->head == this->lastNode)
+        {
+            this->head->head = tmp_n;
+            tmp_n->next = tmp_n;
+            this->head = tmp_n;
+        }
+        if (this->tail == this->lastNode)
+        {
+            this->tail->head = tmp_n;
+            tmp_n->next = this->tail;
+            this->tail = tmp_n;
+        }
+        if (this->lastNode->head && this->lastNode->next)
+        {
+            tmp_n->head = this->lastNode->head;
+            tmp_n->next = this->lastNode;
+            this->lastNode->head->next = tmp_n;
+            this->lastNode->head = tmp_n;
+        }
+    }
+}
+
+char32_t TextClass::getHead()
+{
+    if (!this->head)
+        throw std::out_of_range("List is empty");
+
+    return this->head->value.value();
+}
+
+char32_t TextClass::getTail()
+{
+    if (!this->tail)
+        throw std::out_of_range("List is empty");
+
+    return this->tail->value.value();
+}
+
+void TextClass::append(TextClass List)
+{
+    while (List.head)
+    {
+        Node *tmp_n = new Node;
+        tmp_n->head = this->tail;
+        this->tail->next = tmp_n;
+        tmp_n->value = List.getHead();
+        this->tail = tmp_n;
+        List.removeHead();
     }
 }
