@@ -5,7 +5,7 @@
 #include "ChainedHash.hpp"
 
 void ChainedHash::addItem(std::string &value) {
-    if (length > size / 2)
+    if (length >= (size - 1) / 2)
         resize(size * 2);
 
     key = encode(value);
@@ -27,8 +27,11 @@ void ChainedHash::removeItem(const std::string &value) {
 
     if (!table[ind].empty())
         for (std::list<std::string>::iterator it = table[ind].begin(); it != table[ind].end(); ++it) {
-            if (*it == value)
+            if (*it == value) {
                 table[ind].erase(it);
+                break;  // needed to escape from endless loop if deleted == last node.
+            }
+
         }
     else {
         table[ind].push_front(value);
@@ -56,8 +59,10 @@ std::string ChainedHash::displayTable() {
     std::stringstream S;
 
     for (unsigned i = 0; i < size; ++i) {
-        for (std::list<std::string>::iterator it = table[i].begin(); it != table[i].end(); ++it) {
-            S << *it << " ";
+        if (!table[i].empty()) {
+            for (std::list<std::string>::iterator it = table[i].begin(); it != table[i].end(); ++it) {
+                S << *it << " ";
+            }
         }
     }
 
@@ -71,17 +76,27 @@ void ChainedHash::resize(unsigned size) {
 
     std::list<std::string> *table_ = new std::list<std::string>[size];
 
+    // begin rehashing/deep copying
     for (unsigned i = 0; i < size - 1; ++i) {
-
-        if (i < this->size - 1 and
-            !table[i].empty())
-            table_[i].push_front(table[i].back());
+        // validate if in old table range or not.
+        if (i < this->size) {
+            // is empty??
+            if (not table[i].empty()) {
+                // iter through all nodes
+                for (std::list<std::string>::iterator it = table[i].begin(); it != table[i].end(); ++it) {
+                    // rehash values
+                    key = encode(*it);
+                    ind = hash(key);
+                    // I've been doing push front, pop back (FIFO). Here I'll push back to maintain order since Iter starts at front.
+                    table_[ind].push_back(*it);
+                }
+            }
+        }
     }
 
     delete[] table;
     table = table_;
     this->size = size;
-
 }
 
 int &ChainedHash::hash(int s) {

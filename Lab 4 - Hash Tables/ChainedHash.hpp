@@ -16,7 +16,6 @@ class ChainedHash {
 private:
     unsigned size;
     unsigned length;
-    std::list<std::string> L;
     std::list<std::string> *table;
 
     // having key be a class member is not necessary but makes code a bit easier to understand.

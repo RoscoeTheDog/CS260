@@ -6,7 +6,7 @@
 
 void StringHash::addItem(std::string &value) {
 
-    if (length > size / 2)
+    if (length >= (size - 1) / 2)
         resize(size * 2);
 
     key = encode(value);
@@ -64,18 +64,18 @@ void StringHash::resize(unsigned size) {
     for (unsigned i = 0; i < size - 1; ++i) {
 
         // cpy only if within old table's range.
-        if (i < this->size - 1 and
+        if (i < this->size and
             table[i] not_eq EMPTY)
             table_[i] = table[i];
-        // otherwise just initialize value
+            // otherwise just initialize value
         else
             table_[i] = EMPTY;
     }
 
-    // rehash previous entries before copy
+    // rehash previous entries
     for (unsigned i = 0; i < size - 1; ++i) {
-        // validate in old table range or not.
-        if (i < this->size - 1 and
+        // validate if within old table range or not.
+        if (i < this->size and
             table[i] not_eq EMPTY) {
             key = encode(table[i]);
             ind = hash(key);
