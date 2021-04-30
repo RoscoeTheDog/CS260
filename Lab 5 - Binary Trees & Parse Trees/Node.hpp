@@ -7,9 +7,12 @@
 
 class Node {
 public:
+    Node * head = nullptr;
     Node * right = nullptr;
     Node * left = nullptr;
-    char c{};
+    char value{};
+
+    explicit Node(char c = 0) {c = value;}
 };
 
 

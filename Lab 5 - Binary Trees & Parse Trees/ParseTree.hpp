@@ -10,6 +10,7 @@
 #include <stack>
 #include <sstream>
 #include <locale>
+#include <stdexcept>
 
 class ParseTree {
 private:
@@ -19,23 +20,12 @@ private:
     std::stringstream xInput;
     std::stringstream xOutput;
 
-    // checks macro to determine type attribute. better than using local.h due to limited support of encoding types.
-    bool isop(char c);
+    // checks macro to determine type attribute.
+    // better than using local.h due to limited support of encoded char types
+    // (I considered both ways).
+    bool isoperator(char c);
 
-    /*  constructor-type helper.
-     *  Generates a corresponding tree in xStack to subsequently be parsed into an ouptut string.
-     */
-    void vMakePrefix();
-
-    /*  constructor-type helper.
-     *  Generates a corresponding tree in xStack to subsequently be parsed into an ouptut string.
-     */
-    void vMakeInfix();
-
-    /*  constructor-type helper.
-     *  Generates a corresponding tree in xStack to subsequently be parsed into an ouptut string.
-     */
-    void vMakePostfix();
+    void destroyTree(Node * n = nullptr);
 
 public:
     explicit ParseTree(std::string str = "");
@@ -48,8 +38,9 @@ public:
 
     std::string postOrder();
 
-    void parseInOrder();
+    void parseInOrder(std::string str = "");
 
+    void parsePostFix(std::string str = "");
 };
 
 
