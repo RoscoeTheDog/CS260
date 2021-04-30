@@ -10,9 +10,9 @@ public:
     Node * head = nullptr;
     Node * right = nullptr;
     Node * left = nullptr;
-    char value{};
+    char value;
 
-    explicit Node(char c = 0) {c = value;}
+    Node(char c = 0) {value = c;}
 };
 
 

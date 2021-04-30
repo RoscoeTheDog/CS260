@@ -5,16 +5,25 @@
 #include "ParseTree.hpp"
 
 
-ParseTree::ParseTree(std::string str) {
+ParseTree::ParseTree(const std::string &str) {
     xInput << str;
 
+    // This is just a safety net: checks for infix expressions
+    for (unsigned i = 0; i < str.length(); ++i) {
+        if (str[i] == PARENTH_L ||
+            str[i] == PARENTH_R) {
+            throw std::invalid_argument("constructor expects post-fix expression");
+        }
+    }
+
     if (str != "") {
+        exprType = POSTFIX;
         // build a tree passing in the copied string. This way we can preserve the original string in the input buffer.
         parsePostFix(str);
     }
 }
 
-bool ParseTree::isoperator(char c) {
+bool ParseTree::xIsOperator(char c) {
 
     if (c == PLUS)
         return true;
@@ -48,7 +57,7 @@ void ParseTree::parsePostFix(std::string str) {
             continue;
 
         // "If an operand"
-        if (!isoperator(str[i])) {
+        if (!xIsOperator(str[i])) {
             // "create a new node for the operand"
             Node *N = new Node(str[i]);
             // "push it on the stack"
@@ -57,7 +66,7 @@ void ParseTree::parsePostFix(std::string str) {
         }
 
         // "If an operator"
-        if (isoperator(str[i])) {
+        if (xIsOperator(str[i])) {
 
             // "create a new node for the operator"
             Node *N = new Node(str[i]);
@@ -88,111 +97,101 @@ void ParseTree::parsePostFix(std::string str) {
     xRoot = xStack.back();
     xStack.pop_back();
 
-//    // extra: iterate through the stack (back->front) to construct the output string
-//    xOutput.clear(); // ensure the buffer is emptied first.
-//    for (auto i = xStack.back(); i>xStack.front(); --i) {
-//        xOutput << i->value;
-//    }
 }
 
 std::string ParseTree::inOrder() {
+    // We don't know that a in/out/pre string has been entered prior.
+    // Best to destroy and recreate the tree based on the new input.
+    xDestroyTree(xRoot);
 
-    // Convert infix expression to build postfix tree.
-    this->parseInOrder(xInput.str());
+    // Rebuild tree and output string.
+    parseInOrder(xInput.str());
+
     // xOutput buffer will contain the parsed expression in order.
     return xOutput.str();
-
-//    std::string S = xInput.str();
-//
-//    for (unsigned i = 0; i < S.length(); ++i) {
-//        // if space, continue.
-//        if (std::isspace(S[i]))
-//            continue;
-//
-//        // "if operand.. add to output string
-//        if (std::isalpha(S[i]) or std::isdigit(S[i]))
-//            xOutput << S[i];
-//
-//        // "if L paren.."
-//        if (S[i] == PARENTH_L)
-//            // "push on the stack"
-//            xStr.push_back(S[i]);
-//
-//        // "if R paren.."
-//        if (S[i] == PARENTH_R) {
-//
-//            // "pop top item (continue until get L paren)"
-//            while (not xStr.empty()) {
-//
-//                char xChar = xStr.back(); // Note: back() returns but does not pop!
-//
-//                // "if L paren, push back on stack, stop popping"
-//                if (xChar not_eq PARENTH_L) {
-//                    xOutput << xChar;
-//                    xStr.pop_back(); // removes the actual item
-//                }
-//                else {
-//                    // else discard and end popping
-//                    break;
-//                }
-//            }
-//
-//        }
-//
-//        // "if operator..."
-//        if (isoperator(S[i])) {
-//
-//            while (not xStr.empty()) {
-//
-//                char xChar = xStr.back(); // Note: back() returns but does not pop!
-//
-//                // "if L paren, push back on stack, stop popping"
-//                if (xChar == PARENTH_L)
-//                    break;
-//
-//                // "if not operator with higher precedence, push back on stack,
-//                //  stop popping"
-//                if (oppriority(xChar) < oppriority(S[i]))
-//                    break;
-//                else
-//                    xOutput << xChar;
-//            }
-//            // "push operator"
-//            xStr.push_back(S[i]);
-//        }
-//
-//    }
-//
-//    // "At end of expression, pop and add to buffer"
-//    while (not xStr.empty()) {
-//        xOutput << xStr.back();
-//        xStr.pop_back();
-//    }
-//
-//    return xOutput.str();
-
 }
 
 
-std::string ParseTree::postOrder() {
+std::string ParseTree::postOrder(Node * n) {
 
-    std::stringstream _s;
-
-    // in case of infix expression, filter parenthesis
-    for (unsigned i = 0; i < xOutput.str().length(); ++i) {
-
-        if (xOutput.str()[i] != PARENTH_L &&
-            xOutput.str()[i] != PARENTH_R) {
-            _s << xOutput.str()[i];
-        }
-    }
+    // Ensure the stack is empty.
+    if (!xStr.empty())
+        xStr.clear();
 
     /*
-     *  return the filtered string.
-     *  do not overwrite the member
-     *  if it was initially parsed as inOrder, we should keep it that way
+     *  Recursively go through and add values to the stack from the tree.
+     *  Then, pop off the stack to construct the post order.
+     *  Finally-- use the xInput str to reconstruct the tree we deleted during traversal.
      */
-    return _s.str();
+    if (n) {
+        xStr.push_back(n->value);
+
+        if (n->left)
+            postOrder(n->left);
+
+        if (n->right)
+            postOrder(n->right);
+
+        if (n == n->head->left)
+            n->head->left = nullptr;
+        if (n == n->head->right)
+            n->head->right = nullptr;
+
+        if (n == xRoot){
+            xRoot = nullptr;
+        }
+
+        delete n;
+    }
+
+    xOutput.str("");
+
+    while(!xStr.empty()) {
+        xOutput << xStr.back();
+        xStr.pop_back();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//    std::stringstream _s;
+//
+//    // in case of infix expression, filter parenthesis
+//    for (unsigned i = 0; i < xOutput.str().length(); ++i) {
+//
+//        if (xOutput.str()[i] != PARENTH_L &&
+//            xOutput.str()[i] != PARENTH_R) {
+//            _s << xOutput.str()[i];
+//        }
+//    }
+//
+//    /*
+//     *  return the filtered string.
+//     *  do not overwrite the member
+//     *  if it was initially parsed as inOrder, we should keep it that way
+//     */
+//    return _s.str();
 }
 
 std::string ParseTree::preOrder() {
@@ -201,12 +200,18 @@ std::string ParseTree::preOrder() {
 
 void ParseTree::parseInOrder(std::string str) {
 
+    // Check invalid args
     if (str == "") {
         throw std::invalid_argument("Cannot parse empty string");
     }
+    // If nothing was past to the constructor prior, save the passed in argument
+    if (xInput.str() == "")
+        xInput << str;
+
+    exprType = INFIX
 
     // Ensure the output buffer is empty for use.
-    xOutput.clear();
+    xOutput.str("");
 
     // Iterate through all characters.
     for (unsigned i = 0; i < str.length(); ++i) {
@@ -216,7 +221,7 @@ void ParseTree::parseInOrder(std::string str) {
             continue;
 
         // "if operand.. add to output string
-        if (!isoperator(str[i])) {
+        if (!xIsOperator(str[i])) {
             xOutput << str[i];
             continue;
         }
@@ -244,6 +249,7 @@ void ParseTree::parseInOrder(std::string str) {
                 }
                 else {
                     // else discard and end popping
+                    xStr.pop_back();
                     break;
                 }
             }
@@ -251,7 +257,7 @@ void ParseTree::parseInOrder(std::string str) {
         }
 
         // "if operator..."
-        if (isoperator(str[i])) {
+        if (xIsOperator(str[i])) {
 
             while (!xStr.empty()) {
 
@@ -264,7 +270,7 @@ void ParseTree::parseInOrder(std::string str) {
 
                 // "if not operator with higher precedence, push back on stack,
                 //  stop popping"
-                if (oppriority(xChar) < oppriority(str[i]))
+                if (xOperatorPriority(xChar) < xOperatorPriority(str[i]))
                     break;
                 else {
                     xOutput << xChar;
@@ -291,27 +297,35 @@ void ParseTree::parseInOrder(std::string str) {
 }
 
 ParseTree::~ParseTree() {
-    delete xRoot;
+    // helper function. recursively destroys nodes.
+    xDestroyTree(xRoot);
 }
 
-void ParseTree::destroyTree(Node *n) {
+void ParseTree::xDestroyTree(Node *n) {
 
     // traverse left
     if (n->left)
-        return destroyTree(n->left);
+        return xDestroyTree(n->left);
 
     // traverse right
     if (n->right)
-        return destroyTree(n->right);
+        return xDestroyTree(n->right);
 
-    if (!n->left && !n->right) {
-        // reset root to null
-        if (n == xRoot)
-            xRoot = nullptr;
-        // If we are at a leaf, delete it.
-        delete n;
+    // if root set null
+    if (n == xRoot)
+        xRoot = nullptr;
+    else {
+        if (n->head->left == n)
+            n->head->left = nullptr;
+        if (n->head->right == n)
+            n->head->right = nullptr;
     }
 
+    // If we are at a leaf, delete it.
+    delete n;
+
+    // If root still exists, continue traversing
     if (xRoot)
-        return destroyTree(xRoot);
+        return xDestroyTree(xRoot);
+    // otherwise, everything is deleted
 }

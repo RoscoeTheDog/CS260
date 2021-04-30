@@ -4,7 +4,7 @@
 
 #include "OperatorTypes.hpp"
 
-operator_t oppriority(char c){
+operator_t xOperatorPriority(char c){
 
     operator_t _op;
 

@@ -25,6 +25,6 @@ typedef enum {
     eSPACE,
 } operator_t;
 
-operator_t oppriority(char c);
+operator_t xOperatorPriority(char c);
 
 #endif //LAB_5___BINARY_TREES___PARSE_TREES_OPERATORTYPES_HPP

@@ -4,6 +4,7 @@
 
 #ifndef LAB_5___BINARY_TREES___PARSE_TREES_PARSETREE_HPP
 #define LAB_5___BINARY_TREES___PARSE_TREES_PARSETREE_HPP
+
 #include <string>
 #include "Node.hpp"
 #include "OperatorTypes.hpp"
@@ -14,21 +15,36 @@
 
 class ParseTree {
 private:
-    Node * xRoot = nullptr;
-    std::deque<Node*> xStack;
+    typedef enum {
+        PREFIX = 1,
+        INFIX,
+        POSTFIX,
+
+    } expression_t;
+
+    Node *xRoot = nullptr;
+    std::deque<Node *> xStack;
     std::deque<char> xStr;
+    expression_t exprType;
     std::stringstream xInput;
+
     std::stringstream xOutput;
 
-    // checks macro to determine type attribute.
-    // better than using local.h due to limited support of encoded char types
-    // (I considered both ways).
-    bool isoperator(char c);
+    /*
+     *  checks macro to determine type attribute.
+        better than using local.h due to limited support of encoded char types
+        (I considered both ways).
+    */
+    bool xIsOperator(char c);
 
-    void destroyTree(Node * n = nullptr);
+    /*
+     *  Helper destructor method.
+     *  Traverses through nodes and deletes them recursively
+    */
+    void xDestroyTree(Node *n = nullptr);
 
 public:
-    explicit ParseTree(std::string str = "");
+    explicit ParseTree(const std::string &str = "");
 
     ~ParseTree();
 
@@ -36,7 +52,7 @@ public:
 
     std::string inOrder();
 
-    std::string postOrder();
+    std::string postOrder(Node * n = nullptr);
 
     void parseInOrder(std::string str = "");
 
