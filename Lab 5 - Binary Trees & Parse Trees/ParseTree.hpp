@@ -24,7 +24,7 @@ private:
 
     Node *xRoot = nullptr;
     std::deque<Node *> xStack;
-    std::deque<char> xStr;
+    std::deque<std::optional<char>> xStr;
     expression_t exprType;
     std::stringstream xInput;
 
@@ -41,14 +41,22 @@ private:
      *  Helper destructor method.
      *  Traverses through nodes and deletes them recursively
     */
-    void xDestroyTree(Node *n = nullptr);
+    void vDestroyTree(Node *n = nullptr);
+
+    // This helper erases the contents of the output stream.
+    // It does NOT clear flags like in the normal STD library.
+    void vClearOutStream();
+
+    // This helper erases the contents of the input stream.
+    // It does NOT clear flags like in the normal STD library.
+    void vClearInStream();
 
 public:
     explicit ParseTree(const std::string &str = "");
 
     ~ParseTree();
 
-    std::string preOrder();
+    std::string preOrder(Node * n = nullptr);
 
     std::string inOrder();
 

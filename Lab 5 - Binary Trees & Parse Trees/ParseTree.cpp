@@ -21,6 +21,7 @@ ParseTree::ParseTree(const std::string &str) {
         // build a tree passing in the copied string. This way we can preserve the original string in the input buffer.
         parsePostFix(str);
     }
+
 }
 
 bool ParseTree::xIsOperator(char c) {
@@ -102,7 +103,7 @@ void ParseTree::parsePostFix(std::string str) {
 std::string ParseTree::inOrder() {
     // We don't know that a in/out/pre string has been entered prior.
     // Best to destroy and recreate the tree based on the new input.
-    xDestroyTree(xRoot);
+    vDestroyTree(xRoot);
 
     // Rebuild tree and output string.
     parseInOrder(xInput.str());
@@ -144,10 +145,10 @@ std::string ParseTree::postOrder(Node * n) {
         delete n;
     }
 
-    xOutput.str("");
+    vClearOutStream();
 
     while(!xStr.empty()) {
-        xOutput << xStr.back();
+        xOutput << *xStr.back();
         xStr.pop_back();
     }
 
@@ -194,7 +195,50 @@ std::string ParseTree::postOrder(Node * n) {
 //    return _s.str();
 }
 
-std::string ParseTree::preOrder() {
+std::string ParseTree::preOrder(Node * n) {
+
+    // Ensure the stack is empty.
+    if (!xStr.empty())
+        xStr.clear();
+
+    /*
+     *  Recursively go through each Node and build a string.
+     *
+     *  Traverse through the nodes like a normal binary parse tree head->left etc.
+     */
+
+    if (n) {
+
+        if(*n->value){
+            xStr.push_back(*n->value);
+            n->value = false;   // std::optional lets us flag this as false. Now we can go back to root without having to destroy nodes or do more complicated traversal logic.
+        }
+
+        if (n->left)
+            preOrder(n->left);
+
+        if (n->right)
+            preOrder(n->right);
+
+        // Set parent links to nullptr, depending on child's position.
+        // There is a special case where the current node could be root to watch for.
+        if (n->head->left)
+            n->head->left = nullptr;
+        if (n->head->right)
+            n->head->right = nullptr;
+        if (n == xRoot)
+            xRoot = nullptr;
+
+        delete n;
+    }
+
+    // We should only clear the output buffer when we reach this point.
+    // There is no need to keep initializing it to an empty string each recursive call.
+    vClearOutStream();
+
+    while (!xStr.empty())
+        xOutput << *xStr.front();
+
     return xOutput.str();
 }
 
@@ -208,10 +252,10 @@ void ParseTree::parseInOrder(std::string str) {
     if (xInput.str() == "")
         xInput << str;
 
-    exprType = INFIX
+    exprType = INFIX;
 
     // Ensure the output buffer is empty for use.
-    xOutput.str("");
+    vClearOutStream();
 
     // Iterate through all characters.
     for (unsigned i = 0; i < str.length(); ++i) {
@@ -239,7 +283,7 @@ void ParseTree::parseInOrder(std::string str) {
             // "pop top item (continue until get L paren)"
             while (!xStr.empty()) {
 
-                char xChar = xStr.back(); // Note: back() returns but does not pop!
+                char xChar = *xStr.back(); // Note: back() returns but does not pop!
 
                 // "if L paren, push back on stack, stop popping"
                 if (xChar != PARENTH_L) {
@@ -261,7 +305,7 @@ void ParseTree::parseInOrder(std::string str) {
 
             while (!xStr.empty()) {
 
-                char xChar = xStr.back(); // Note: back() returns but does not pop!
+                char xChar = *xStr.back(); // Note: back() returns but does not pop!
 
                 // "if L paren, push back on stack, stop popping"
                 if (xChar == PARENTH_L) {
@@ -287,7 +331,7 @@ void ParseTree::parseInOrder(std::string str) {
 
     // "At end of expression, pop and add to buffer"
     while (!xStr.empty()) {
-        xOutput << xStr.back();
+        xOutput << *xStr.back();
         xStr.pop_back();
     }
 
@@ -298,18 +342,18 @@ void ParseTree::parseInOrder(std::string str) {
 
 ParseTree::~ParseTree() {
     // helper function. recursively destroys nodes.
-    xDestroyTree(xRoot);
+    vDestroyTree(xRoot);
 }
 
-void ParseTree::xDestroyTree(Node *n) {
+void ParseTree::vDestroyTree(Node *n) {
 
     // traverse left
     if (n->left)
-        return xDestroyTree(n->left);
+        return vDestroyTree(n->left);
 
     // traverse right
     if (n->right)
-        return xDestroyTree(n->right);
+        return vDestroyTree(n->right);
 
     // if root set null
     if (n == xRoot)
@@ -326,6 +370,14 @@ void ParseTree::xDestroyTree(Node *n) {
 
     // If root still exists, continue traversing
     if (xRoot)
-        return xDestroyTree(xRoot);
+        return vDestroyTree(xRoot);
     // otherwise, everything is deleted
+}
+
+void ParseTree::vClearOutStream() {
+    xInput.str("");
+}
+
+void ParseTree::vClearInStream() {
+    xOutput.str("");
 }

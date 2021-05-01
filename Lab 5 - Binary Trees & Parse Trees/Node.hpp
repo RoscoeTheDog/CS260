@@ -5,12 +5,14 @@
 #ifndef LAB_5___BINARY_TREES___PARSE_TREES_NODE_HPP
 #define LAB_5___BINARY_TREES___PARSE_TREES_NODE_HPP
 
+#include <optional>
+
 class Node {
 public:
     Node * head = nullptr;
     Node * right = nullptr;
     Node * left = nullptr;
-    char value;
+    std::optional<char> value;
 
     Node(char c = 0) {value = c;}
 };
