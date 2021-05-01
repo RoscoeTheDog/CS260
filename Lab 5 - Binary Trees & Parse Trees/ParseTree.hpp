@@ -35,7 +35,7 @@ private:
         better than using local.h due to limited support of encoded char types
         (I considered both ways).
     */
-    bool xIsOperator(char c);
+    static bool xIsOperator(char c);
 
     /*
      *  Helper destructor method.
@@ -43,19 +43,23 @@ private:
     */
     void vDestroyTree(Node *n = nullptr);
 
-    // This helper erases the contents of the output stream.
+    // Helper that erases the contents of the output stream.
     // It does NOT clear flags like in the normal STD library.
     void vClearOutStream();
 
-    // This helper erases the contents of the input stream.
+    // Helper that erases the contents of the input stream.
     // It does NOT clear flags like in the normal STD library.
     void vClearInStream();
+
+    void vConstructTree();
 
 public:
     explicit ParseTree(const std::string &str = "");
 
     ~ParseTree();
 
+    // Recursively go through each Node starting from root to build post-fix string.
+    // Traverse through the nodes like a normal binary parse tree head->left etc.
     std::string preOrder(Node * n = nullptr);
 
     std::string inOrder();
