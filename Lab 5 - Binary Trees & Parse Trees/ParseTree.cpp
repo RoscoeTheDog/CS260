@@ -340,7 +340,7 @@ std::string ParseTree::inOrder() {
 	// Build the xStr stack with inOrder notation.
 	// Returns xInput if inOrder was parsed last.
 	// Recursively traverses tree if postOrder pared last.
-	vBuildStackInorder();
+	vBuildStackInorder(xRoot);
 
 	// Parse the stack to build the output stream. FIFO for post-order.
 	while (!xStr.empty()) {
@@ -547,7 +547,15 @@ void ParseTree::parsePostFix(std::string str) {
 
 void ParseTree::vBuildStackInorder(Node *n) {
 
+/*	 Note: in some cases, flagging character value as null can be helpful here.
+	       however it probably is not necessary for the leaf nodes as they get deleted progressively
+	       I am keeping it in for consistency and good practice to init/de-init values.*/
 	if (n) {
+
+		// Special case: add empty left parenthesis at start of algo
+		if (xStr.empty()) {
+			xStr.push_back(std::optional<char>('('));
+		}
 
 		if (n->left) {
 			return vBuildStackInorder(n->left);
@@ -567,8 +575,8 @@ void ParseTree::vBuildStackInorder(Node *n) {
 
 		if (n->head) {
 			if (n == n->head->right && n->value) {
-				xStr.push_back(std::optional<char>(')'));
 				xStr.push_back(n->value);
+				xStr.push_back(std::optional<char>(')'));
 				n->value = std::nullopt;
 			}
 		}
@@ -583,6 +591,7 @@ void ParseTree::vBuildStackInorder(Node *n) {
 			return vBuildStackInorder(n->right);
 		}
 
+		// Special case: push right parenthesis if end of algo
 		if (n == xRoot) {
 			xStr.push_back(std::optional<char>(')'));
 			xRoot = nullptr;

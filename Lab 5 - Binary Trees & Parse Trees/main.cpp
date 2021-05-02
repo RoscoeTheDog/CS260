@@ -10,24 +10,11 @@
 
 #include "ParseTree.hpp"
 
-#define TEST_BASE
+//#define TEST_BASE
 //#define TEST_ADV
-//#define TEST_THINK
-
-#include "OperatorTypes.hpp"
-
+#define TEST_THINK
 
 int main(int argc, const char * argv[]) {
-
-//    std::string S = "3+(5+9)*2";
-
-//    ParseTree P;
-//    P.parseInOrder(S);
-////    P.parseInOrder(S);
-////    P.parseInOrder(S);
-//    std::cout << P.preOrder() << std::endl;
-//    std::cout << P.postOrder() << std::endl;
-//    std::cout << P.inOrder() << std::endl;
 
 #ifdef TEST_BASE
 

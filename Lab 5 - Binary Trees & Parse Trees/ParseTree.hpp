@@ -54,13 +54,15 @@ private:
 	void vClearInStream();
 
 	// Builds the container stack in prefix notation. It can then be popped and
-	// returned by preOrder();
+	// returned by ParseTree::preOrder();
 	void vBuildStackPreorder(Node *n = nullptr);
 
 	// Builds the container stack in postOrder notation. It can then be popped and
-	// returned by postOrder();
+	// returned by ParseTree::postOrder();
 	void vBuildStackPostorder(Node *n = nullptr);
 
+	// Builds the container stack in inOrder notation. This can then be popped and
+	// returned by ParseTree::inOrder();
 	void vBuildStackInorder(Node *n = nullptr);
 
 	// Builds the container stack in inOrder notation. It can then be popped and
