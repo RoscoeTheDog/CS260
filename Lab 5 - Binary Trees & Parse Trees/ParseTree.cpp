@@ -5,7 +5,7 @@
 #include "ParseTree.hpp"
 
 ParseTree::ParseTree(const std::string &str) {
-
+	// pass in the string to the input buffer
 	xInput << str;
 
 	// This is just a safety net: checks for infix expressions
@@ -17,9 +17,6 @@ ParseTree::ParseTree(const std::string &str) {
 
 	// Check if string pass was empty. If it is, do not do anything.
 	if (str != "") {
-		// Flag it's type. It is presumed a post-fix expression when passed to the
-		// constructor.
-		exprType = POSTFIX;
 		// build a tree passing in the copied string. This way we can preserve the
 		// original string in the input buffer.
 		parsePostFix(str);
@@ -33,37 +30,72 @@ ParseTree::~ParseTree() {
 
 void ParseTree::vDestroyTree(Node *n) {
 
-	// traverse left
-	if (n->left) {
-		return vDestroyTree(n->left);
-	}
-
-	// traverse right
-	if (n->right) {
-		return vDestroyTree(n->right);
-	}
-
-	// if root set null
-	if (n == xRoot) {
-		xRoot = nullptr;
-	}
-	else {
-		if (n->head->left == n) {
-			n->head->left = nullptr;
-		}
-		if (n->head->right == n) {
-			n->head->right = nullptr;
-		}
-	}
-
-	// If we are at a leaf, delete it.
-	delete n;
-
-	// If root still exists, continue traversing
+	// Extra guard in case somehow xRoot is null.
 	if (xRoot) {
+
+		// traverse left
+		if (n->left) {
+			return vDestroyTree(n->left);
+		}
+
+		// traverse right
+		if (n->right) {
+			return vDestroyTree(n->right);
+		}
+
+		// if root set null
+		if (n == xRoot) {
+			xRoot = nullptr;
+		}
+		else {
+			if (n->head->left == n) {
+				n->head->left = nullptr;
+			}
+			if (n->head->right == n) {
+				n->head->right = nullptr;
+			}
+		}
+
+		// If we are at a leaf, delete it.
+		delete n;
+
+		// return to root
 		return vDestroyTree(xRoot);
 	}
-	// otherwise, everything is deleted
+
+
+//
+//	// traverse left
+//	if (n->left) {
+//		return vDestroyTree(n->left);
+//	}
+//
+//	// traverse right
+//	if (n->right) {
+//		return vDestroyTree(n->right);
+//	}
+//
+//	// if root set null
+//	if (n == xRoot) {
+//		xRoot = nullptr;
+//	}
+//	else {
+//		if (n->head->left == n) {
+//			n->head->left = nullptr;
+//		}
+//		if (n->head->right == n) {
+//			n->head->right = nullptr;
+//		}
+//	}
+//
+//	// If we are at a leaf, delete it.
+//	delete n;
+//
+//	// If root still exists, continue traversing
+//	if (xRoot) {
+//		return vDestroyTree(xRoot);
+//	}
+//	// otherwise, everything is deleted
 }
 
 bool ParseTree::vConstructTree() {
@@ -144,13 +176,11 @@ void ParseTree::vBuildStackPreorder(Node *n) {
 		}
 
 		if (n->left) {
-			vBuildStackPreorder(n->left);
-			return;
+			return vBuildStackPreorder(n->left);
 		}
 
 		if (n->right) {
-			vBuildStackPreorder(n->right);
-			return;
+			return vBuildStackPreorder(n->right);
 		}
 
 		// Set parent links to nullptr, depending on child's position.
@@ -171,7 +201,7 @@ void ParseTree::vBuildStackPreorder(Node *n) {
 
 		delete n;
 		if (xRoot) {
-			vBuildStackPreorder(xRoot);
+			return vBuildStackPreorder(xRoot);
 		}
 	}
 	// exit
@@ -185,30 +215,37 @@ void ParseTree::vBuildStackPostorder(Node *n) {
 	 *  Finally-- use the xInput str to reconstruct the tree we deleted during
 	 * traversal.
 	 */
-	if (n) {
+	if (xRoot) {
+
+		// Traverse until we hit a leaf
+		if (n->left) {
+			return vBuildStackPostorder(n->left);
+		}
+		if (n->right) {
+			return vBuildStackPostorder(n->right);
+		}
+		// Add value to the stack.
 		xStr.push_back(n->value);
 
-		if (n->left) {
-			vBuildStackPostorder(n->left);
-		}
-
-		if (n->right) {
-			vBuildStackPostorder(n->right);
-		}
-
-		if (n == n->head->left) {
-			n->head->left = nullptr;
-		}
-		if (n == n->head->right) {
-			n->head->right = nullptr;
-		}
-
+		// clean up references and delete node.
 		if (n == xRoot) {
 			xRoot = nullptr;
 		}
-
+		else {
+			if (n == n->head->left) {
+				n->head->left = nullptr;
+			}
+			if (n == n->head->right) {
+				n->head->right = nullptr;
+			}
+		}
 		delete n;
+
+		if (xRoot) {
+			return vBuildStackPostorder(xRoot);
+		}
 	}
+	//exit
 }
 
 void ParseTree::vBuildStackInorder(Node *n) {
@@ -290,30 +327,29 @@ void ParseTree::vBuildStackInorder(Node *n) {
 }
 
 std::string ParseTree::inOrder() {
-	// We don't know that a in/out/pre string has been entered prior.
-	// Best to destroy and recreate the tree based on the new input.
-	vDestroyTree(xRoot);
 
-	// Rebuild the tree after ensuring there is no existing data
-	vConstructTree();
 
-	// Build the stack for an inOrder expression
-	vBuildStackInorder(xRoot);
-
-	// Ensure the output stream contains no data
-	vClearOutStream();
-
-	// Pop off the stack and build the tree. (LIFO)
-	while (!xStr.empty()) {
-		xOutput << *xStr.back();
-		xStr.pop_back();
+	if (exprType == INFIX) {
+		return xInput.str();
+	}
+	else {
+		throw std::logic_error("Cannot return expression from incompatible input type");
 	}
 
-	// // // Rebuild tree and output string.
-	// parseInOrder(xInput.str());
-
-	// xOutput buffer will contain the parsed expression
-	return xOutput.str();
+//	// Provide a clean tree.
+//	vDestroyTree(xRoot);
+//
+//	// Rebuild the tree after ensuring there is no existing data
+//	vConstructTree();
+//
+//	/*
+//	*   The inOrder algorithm is a bit different from the others in that it builds the tree and output string at the same time
+//	*   Do not call vClearOutStream() or pop off the stack here!
+//	*/
+//	vBuildStackInorder(xRoot);
+//
+//	// xOutput buffer will contain the parsed expression
+//	return xOutput.str();
 }
 
 std::string ParseTree::postOrder() {
@@ -327,9 +363,6 @@ std::string ParseTree::postOrder() {
 	// This should not be necessary, but ensures we have a clean slate.
 	vDestroyTree(xRoot);
 
-	// // Build the stack for a post order expression
-	// vBuildStackPostorder(xRoot);
-
 	// Reconstruct the tree after traversing and building the stack.
 	vConstructTree();
 
@@ -337,13 +370,12 @@ std::string ParseTree::postOrder() {
 	vClearOutStream();
 
 	//Build the stack for a post order expression
-	vBuildStackPostorder();
+	vBuildStackPostorder(xRoot);
 
-	// Parse the stack to build the output stream. LIFO for post-order.
+	// Parse the stack to build the output stream. FIFO for post-order.
 	while (!xStr.empty()) {
-		xOutput << *xStr.back(); // Note: xStr holds std::optional container. It
-		// must be de-referenced for the value.
-		xStr.pop_back();
+		xOutput << *xStr.front(); // Note: xStr holds std::optional container. It must be de-referenced for the value.
+		xStr.pop_front();
 	}
 
 	return xOutput.str();
@@ -392,14 +424,10 @@ void ParseTree::parseInOrder(std::string str) {
 		xInput << str;
 	}
 
-	// Flag the expression type.
-	// This is performed everytime a corresponding parser is called.
-	exprType = INFIX;
-
 	// Ensure the output buffer is empty for use.
 	vClearOutStream();
 
-	// Build the stack to parse an inOrder expression.
+	// Build a stack from the input to an inOrder expression.
 	// This will eventually convert the string into a post-order tree.
 	vBuildStackInorder();
 
@@ -411,6 +439,10 @@ void ParseTree::parseInOrder(std::string str) {
 
 	// Use the output buffer which includes parenthesis to build the tree as a post-fix expression.
 	parsePostFix(xOutput.str());
+
+	// Flag the expression type.
+	// This is performed everytime a corresponding parser is called to track the input.
+	exprType = INFIX;
 }
 
 void ParseTree::parsePostFix(std::string str) {
@@ -420,8 +452,13 @@ void ParseTree::parsePostFix(std::string str) {
 	}
 
 	// Make sure the stack is empty before populating
-	if (!xStack.empty()){
+	if (!xStack.empty()) {
 		xStack.empty();
+	}
+
+	// Destroy the tree if it exists.
+	if (xRoot) {
+		vDestroyTree(xRoot);
 	}
 
 	// "Look at each character in the string in order"
@@ -471,4 +508,8 @@ void ParseTree::parsePostFix(std::string str) {
 	// "Pop the top of the stack and save the node as root of the tree"
 	xRoot = xStack.back();
 	xStack.pop_back();
+
+	// Flag the expression type.
+	// This is performed everytime a corresponding parser is called to track the input.
+	exprType = POSTFIX;
 }

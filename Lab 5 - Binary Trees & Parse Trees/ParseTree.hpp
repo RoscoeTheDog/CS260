@@ -16,7 +16,8 @@
 class ParseTree {
 private:
 	typedef enum {
-		PREFIX = 1,
+		START = 0,
+		PREFIX,
 		INFIX,
 		POSTFIX,
 	} expression_t;
@@ -26,7 +27,7 @@ private:
 	std::stringstream xOutput;
 	std::deque<Node *> xStack;
 	std::deque<std::optional<char>> xStr;
-	expression_t exprType;
+	expression_t exprType = START;
 
 	/*
 		checks macro to determine type attribute.
@@ -78,8 +79,10 @@ public:
 	// Returns the input string as a postOrder expression.
 	std::string postOrder();
 
+	// Note: 'parser' methods build trees, for this lab in general.
 	void parseInOrder(std::string str = "");
 
+	// Note: 'parser' methods build trees, for this lab in general.
 	void parsePostFix(std::string str = "");
 };
 
