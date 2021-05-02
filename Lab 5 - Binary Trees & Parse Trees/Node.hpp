@@ -14,7 +14,7 @@ public:
     Node * left = nullptr;
     std::optional<char> value;
 
-    Node(char c = 0) {value = c;}
+    explicit Node(char c) {value = c;}
 };
 
 
