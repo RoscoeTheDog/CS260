@@ -31,7 +31,7 @@ ParseTree::~ParseTree() {
 void ParseTree::vDestroyTree(Node *n) {
 
 	// Extra guard in case somehow xRoot is null.
-	if (xRoot) {
+	if (n) {
 
 		// traverse left
 		if (n->left) {
@@ -59,8 +59,11 @@ void ParseTree::vDestroyTree(Node *n) {
 		// If we are at a leaf, delete it.
 		delete n;
 
-		// return to root
-		return vDestroyTree(xRoot);
+		if (xRoot) {
+			// return to root
+			return vDestroyTree(xRoot);
+		}
+
 	}
 
 
@@ -160,12 +163,6 @@ bool ParseTree::xIsOperator(char c) {
 }
 
 void ParseTree::vBuildStackPreorder(Node *n) {
-	// If root still has its value, we can deduce that the function is being
-	// called for the first time. If the user did not pass in the root from a
-	// higher level, then we can set it for them.
-	if (xRoot->value) {
-		n = xRoot;
-	}
 
 	if (n) {
 
@@ -215,7 +212,7 @@ void ParseTree::vBuildStackPostorder(Node *n) {
 	 *  Finally-- use the xInput str to reconstruct the tree we deleted during
 	 * traversal.
 	 */
-	if (xRoot) {
+	if (n) {
 
 		// Traverse until we hit a leaf
 		if (n->left) {
@@ -388,7 +385,10 @@ std::string ParseTree::preOrder() {
 		xStr.clear();
 	}
 
-	vDestroyTree(xRoot);
+	// Destroy the previous tree, if exists (Shouldn't be necessary).
+	if (xRoot) {
+		vDestroyTree(xRoot);
+	}
 
 	// Construct the tree from input string (this->xInput).
 	vConstructTree();
@@ -399,11 +399,21 @@ std::string ParseTree::preOrder() {
 	// Recursively build the stack in preOrder notation
 	vBuildStackPreorder(xRoot);
 
+//	if (exprType == POSTFIX) {
+//		// Pop off the stack and create the output string (this->xOutput). FIFO for pre-order.
+//		while (!xStr.empty()) {
+//			xOutput << *xStr.back(); // Note: std::optional must be de-referenced
+//			xStr.pop_back();
+//		}
+//	}
+
+
 	// Pop off the stack and create the output string (this->xOutput). FIFO for pre-order.
 	while (!xStr.empty()) {
 		xOutput << *xStr.front(); // Note: std::optional must be de-referenced
 		xStr.pop_front();
 	}
+
 
 	return xOutput.str();
 }
@@ -450,10 +460,14 @@ void ParseTree::parsePostFix(std::string str) {
 	if (str == "") {
 		throw std::invalid_argument("cannot parse an empty string");
 	}
+	// A post-fix expression requires a trailing operator
+	if (!xIsOperator(str[str.length() - 1])) {
+		throw std::invalid_argument("post order notation requires trailing operators");
+	}
 
 	// Make sure the stack is empty before populating
 	if (!xStack.empty()) {
-		xStack.empty();
+		xStack.clear();
 	}
 
 	// Destroy the tree if it exists.
