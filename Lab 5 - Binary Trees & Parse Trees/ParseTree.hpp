@@ -61,9 +61,11 @@ private:
 	// returned by postOrder();
 	void vBuildStackPostorder(Node *n = nullptr);
 
+	void vBuildStackInorder(Node *n = nullptr);
+
 	// Builds the container stack in inOrder notation. It can then be popped and
 	// returned by inOrder();
-	void vBuildStackInorder(Node *n = nullptr);
+	void vInorderToPostfix(Node *n = nullptr);
 
 public:
 	explicit ParseTree(const std::string &str = "");

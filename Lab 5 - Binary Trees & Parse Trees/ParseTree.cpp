@@ -245,7 +245,7 @@ void ParseTree::vBuildStackPostorder(Node *n) {
 	//exit
 }
 
-void ParseTree::vBuildStackInorder(Node *n) {
+void ParseTree::vInorderToPostfix(Node *n) {
 
 	// Copying the variable may save time from calling deque methods each time. Not sure.
 	std::string str = xInput.str();
@@ -325,13 +325,30 @@ void ParseTree::vBuildStackInorder(Node *n) {
 
 std::string ParseTree::inOrder() {
 
-
 	if (exprType == INFIX) {
 		return xInput.str();
 	}
-	else {
-		throw std::logic_error("Cannot return expression from incompatible input type");
+
+	// Make sure output stream has no data
+	vClearOutStream();
+
+	// Make sure string stack is empty
+	if (!xStr.empty()) {
+		xStr.empty();
 	}
+
+	// Build the xStr stack with inOrder notation.
+	// Returns xInput if inOrder was parsed last.
+	// Recursively traverses tree if postOrder pared last.
+	vBuildStackInorder();
+
+	// Parse the stack to build the output stream. FIFO for post-order.
+	while (!xStr.empty()) {
+		xOutput << *xStr.front(); // Note: xStr holds std::optional container. It must be de-referenced for the value.
+		xStr.pop_front();
+	}
+
+	return xOutput.str();
 
 //	// Provide a clean tree.
 //	vDestroyTree(xRoot);
@@ -343,7 +360,7 @@ std::string ParseTree::inOrder() {
 //	*   The inOrder algorithm is a bit different from the others in that it builds the tree and output string at the same time
 //	*   Do not call vClearOutStream() or pop off the stack here!
 //	*/
-//	vBuildStackInorder(xRoot);
+//	vInorderToPostfix(xRoot);
 //
 //	// xOutput buffer will contain the parsed expression
 //	return xOutput.str();
@@ -439,7 +456,7 @@ void ParseTree::parseInOrder(std::string str) {
 
 	// Build a stack from the input to an inOrder expression.
 	// This will eventually convert the string into a post-order tree.
-	vBuildStackInorder();
+	vInorderToPostfix();
 
 	// Pop and add all elements to output buffer.
 	while (!xStr.empty()) {
@@ -526,4 +543,64 @@ void ParseTree::parsePostFix(std::string str) {
 	// Flag the expression type.
 	// This is performed everytime a corresponding parser is called to track the input.
 	exprType = POSTFIX;
+}
+
+void ParseTree::vBuildStackInorder(Node *n) {
+
+	if (n) {
+
+		if (n->left) {
+			return vBuildStackInorder(n->left);
+		}
+
+		if (n == xRoot && n->value) {
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+			return vBuildStackInorder(xRoot);
+		}
+
+		if (n->value && xIsOperator(*n->value)) {
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+			return vBuildStackInorder(xRoot);
+		}
+
+		if (n->head) {
+			if (n == n->head->right && n->value) {
+				xStr.push_back(std::optional<char>(')'));
+				xStr.push_back(n->value);
+				n->value = std::nullopt;
+			}
+		}
+
+		if (n->value && !xIsOperator(*n->value)) {
+			xStr.push_back(std::optional<char>('('));
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+		}
+
+		if (n->right) {
+			return vBuildStackInorder(n->right);
+		}
+
+		if (n == xRoot) {
+			xStr.push_back(std::optional<char>(')'));
+			xRoot = nullptr;
+		}
+		else {
+			if (n == n->head->left) {
+				n->head->left = nullptr;
+			}
+			if (n == n->head->right) {
+				n->head->right = nullptr;
+			}
+		}
+
+		delete n;
+
+		if (xRoot) {
+			return vBuildStackInorder(xRoot);
+		}
+	}
+
 }
