@@ -213,6 +213,7 @@ void ParseTree::vBuildStackPostorder(Node *n) {
 
 void ParseTree::vBuildStackInorder(Node *n) {
 
+	// Copying the variable may save time from calling deque methods each time. Not sure.
 	std::string str = xInput.str();
 
 	// Iterate through all characters.
@@ -315,21 +316,28 @@ std::string ParseTree::inOrder() {
 	return xOutput.str();
 }
 
-std::string ParseTree::postOrder(Node *n) {
+std::string ParseTree::postOrder() {
 
 	// Ensure the stack is empty.
 	if (!xStr.empty()) {
 		xStr.clear();
 	}
 
-	// Build the stack for a post order expression
-	vBuildStackPostorder();
+	// Delete the tree, if previously existing.
+	// This should not be necessary, but ensures we have a clean slate.
+	vDestroyTree(xRoot);
+
+	// // Build the stack for a post order expression
+	// vBuildStackPostorder(xRoot);
 
 	// Reconstruct the tree after traversing and building the stack.
 	vConstructTree();
 
 	// Ensure the output stream is cleared before parsing.
 	vClearOutStream();
+
+	//Build the stack for a post order expression
+	vBuildStackPostorder();
 
 	// Parse the stack to build the output stream. LIFO for post-order.
 	while (!xStr.empty()) {
@@ -348,20 +356,20 @@ std::string ParseTree::preOrder() {
 		xStr.clear();
 	}
 
-	// Use recursive helper to build the stack holding values in preOrder
-	vBuildStackPreorder(xRoot);
+	vDestroyTree(xRoot);
 
-	// Reconstruct the tree from input string (this->xInput).
+	// Construct the tree from input string (this->xInput).
 	vConstructTree();
 
-	// Ensure the output buffer is empty before parsing stack.
+	// Ensure the output buffer is empty before parsing stack. This cannot be done within the recursive function.
 	vClearOutStream();
 
-	// Pop off and create the output string (this->xOutput). FIFO for pre-order
-	// expression.
+	// Recursively build the stack in preOrder notation
+	vBuildStackPreorder(xRoot);
+
+	// Pop off the stack and create the output string (this->xOutput). FIFO for pre-order.
 	while (!xStr.empty()) {
-		xOutput << *xStr.front(); // Note: xStr holds std::optional container. It
-		// must be de-referenced for the value.
+		xOutput << *xStr.front(); // Note: std::optional must be de-referenced
 		xStr.pop_front();
 	}
 
@@ -370,33 +378,38 @@ std::string ParseTree::preOrder() {
 
 void ParseTree::parseInOrder(std::string str) {
 
-	// validate args
+	// check validate args (since only the constructor accepts post-order specific only)
 	if (str == "") {
 		throw std::invalid_argument("Cannot parse empty string");
 	}
 
-	// If nothing was past to the constructor prior, save the passed in argument
+	// If nothing was passed to the constructor prior, save nothing as input
 	if (xInput.str() == "") {
 		xInput << str;
 	}
+	else {  // clear and set if pre-existing
+		vClearInStream();
+		xInput << str;
+	}
 
-	// Flag the expression type. This is performed everytime a new input string is
-	// parsed.
+	// Flag the expression type.
+	// This is performed everytime a corresponding parser is called.
 	exprType = INFIX;
 
 	// Ensure the output buffer is empty for use.
 	vClearOutStream();
 
-	// Note: build-stack in order also builds the tree.
+	// Build the stack to parse an inOrder expression.
+	// This will eventually convert the string into a post-order tree.
 	vBuildStackInorder();
 
-	// "At end of expression, pop and add to buffer"
+	// Pop and add all elements to output buffer.
 	while (!xStr.empty()) {
 		xOutput << *xStr.back();
 		xStr.pop_back();
 	}
 
-	// Call string parser method to build tree as infix to postfix
+	// Use the output buffer which includes parenthesis to build the tree as a post-fix expression.
 	parsePostFix(xOutput.str());
 }
 
@@ -404,6 +417,11 @@ void ParseTree::parsePostFix(std::string str) {
 
 	if (str == "") {
 		throw std::invalid_argument("cannot parse an empty string");
+	}
+
+	// Make sure the stack is empty before populating
+	if (!xStack.empty()){
+		xStack.empty();
 	}
 
 	// "Look at each character in the string in order"

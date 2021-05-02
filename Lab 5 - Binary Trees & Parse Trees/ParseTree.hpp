@@ -69,14 +69,14 @@ public:
 
 	~ParseTree();
 
-	// Recursively go through each Node starting from root to build post-fix
-	// string. Traverse through the nodes like a normal binary parse tree
-	// head->left etc.
+	// Returns the input string as a preOrder expression.
 	std::string preOrder();
 
+	// Returns the input string as a inOrder expression.
 	std::string inOrder();
 
-	std::string postOrder(Node *n = nullptr);
+	// Returns the input string as a postOrder expression.
+	std::string postOrder();
 
 	void parseInOrder(std::string str = "");
 
