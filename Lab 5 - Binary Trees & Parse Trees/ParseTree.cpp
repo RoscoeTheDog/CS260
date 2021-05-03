@@ -245,7 +245,155 @@ void ParseTree::vBuildStackPostorder(Node *n) {
 	//exit
 }
 
-void ParseTree::vInorderToPostfix(Node *n) {
+void ParseTree::vBuildStackInorder(Node *n) {
+
+/*	 Note: in some cases, flagging character value as null can be helpful here.
+	       however it probably is not necessary for the leaf nodes as they get deleted progressively
+	       I am keeping it in for consistency and good practice to init/de-init values.*/
+	if (n) {
+
+		// Special case: add empty left parenthesis at start of algo
+		if (xStr.empty()) {
+			xStr.push_back(std::optional<char>('('));
+		}
+
+		if (n->left) {
+			return vBuildStackInorder(n->left);
+		}
+
+		if (n == xRoot && n->value) {
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+			return vBuildStackInorder(xRoot);
+		}
+
+		if (n->value && xIsOperator(*n->value)) {
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+			return vBuildStackInorder(xRoot);
+		}
+
+		// Check if we can peak the parent for node position relationships
+		if (n->head) {
+			if (n == n->head->right && n->value) {
+				xStr.push_back(n->value);
+				xStr.push_back(std::optional<char>(')'));
+				n->value = std::nullopt;
+			}
+		}
+
+		if (n->value && !xIsOperator(*n->value)) {
+			xStr.push_back(std::optional<char>('('));
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+		}
+
+		if (n->right) {
+			return vBuildStackInorder(n->right);
+		}
+
+		// Special case: push right parenthesis if end of algo
+		if (n == xRoot) {
+			xStr.push_back(std::optional<char>(')'));
+			xRoot = nullptr;
+		}
+		else {
+			if (n == n->head->left) {
+				n->head->left = nullptr;
+			}
+			if (n == n->head->right) {
+				n->head->right = nullptr;
+			}
+		}
+
+		delete n;
+
+		if (xRoot) {
+			return vBuildStackInorder(xRoot);
+		}
+	}
+
+}
+
+void ParseTree::vBuildStackInorderSimple(Node *n) {
+
+	/*	 Note: in some cases, flagging character value as null can be helpful here.
+	       however it probably is not necessary for the leaf nodes as they get deleted progressively
+	       I am keeping it in for consistency and good practice to init/de-init values.*/
+	if (n) {
+
+		if (n->left) {
+			return vBuildStackInorderSimple(n->left);
+		}
+
+		if (n == xRoot && n->value) {
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+			return vBuildStackInorderSimple(xRoot);
+		}
+
+		if (n->value && xIsOperator(*n->value)) {
+			xStr.push_back(n->value);
+			n->value = std::nullopt;
+			return vBuildStackInorderSimple(xRoot);
+		}
+
+		// Check if we can peak the parent for node position relationships
+		if (n->head) {
+			if (n == n->head->right && n->value) {
+				// Peak the stack for the type of operator
+				std::optional<char> c = xStr.back();
+				// Check operator priority. If it is addition or subtraction we do not need parenthesis.
+				if (c == PLUS || c == MINUS) {
+					xStr.push_back(n->value);
+					xStr.push_back(std::optional<char>(')'));
+					n->value = std::nullopt;
+				}
+				else {
+					xStr.push_back(n->value);
+					n->value = std::nullopt;
+				}
+			}
+		}
+
+		if (n->value && !xIsOperator(*n->value)) {
+			// Check operator priority. If it is addition or subtraction we do not need parenthesis.
+			if (n->value == PLUS || n->value == MINUS) {
+				xStr.push_back(std::optional<char>('('));
+				xStr.push_back(n->value);
+				n->value = std::nullopt;
+			}
+			else {
+				xStr.push_back(n->value);
+				n->value = std::nullopt;
+			}
+		}
+
+		if (n->right) {
+			return vBuildStackInorderSimple(n->right);
+		}
+
+		if (n == xRoot) {
+			xRoot = nullptr;
+		}
+		else {
+			if (n == n->head->left) {
+				n->head->left = nullptr;
+			}
+			if (n == n->head->right) {
+				n->head->right = nullptr;
+			}
+		}
+
+		delete n;
+
+		if (xRoot) {
+			return vBuildStackInorderSimple(xRoot);
+		}
+	}
+}
+
+void ParseTree::vStrInfixToPostfix(Node *n) {
 
 	// Copying the variable may save time from calling deque methods each time. Not sure.
 	std::string str = xInput.str();
@@ -323,11 +471,11 @@ void ParseTree::vInorderToPostfix(Node *n) {
 	}
 }
 
-std::string ParseTree::inOrder() {
+std::string ParseTree::inOrder(bool simplified) {
 
-	if (exprType == INFIX) {
-		return xInput.str();
-	}
+//	if (exprType == INFIX) {
+//		return xInput.str();
+//	}
 
 	// Make sure output stream has no data
 	vClearOutStream();
@@ -337,10 +485,16 @@ std::string ParseTree::inOrder() {
 		xStr.empty();
 	}
 
-	// Build the xStr stack with inOrder notation.
-	// Returns xInput if inOrder was parsed last.
-	// Recursively traverses tree if postOrder pared last.
-	vBuildStackInorder(xRoot);
+	// Build the stack according to the designator param
+	if (simplified) {
+		vBuildStackInorderSimple(xRoot);
+	}
+	else {
+		// Build the xStr stack with inOrder notation.
+		// Returns xInput if inOrder was parsed last.
+		// Recursively traverses tree if postOrder pared last.
+		vBuildStackInorder(xRoot);
+	}
 
 	// Parse the stack to build the output stream. FIFO for post-order.
 	while (!xStr.empty()) {
@@ -349,21 +503,6 @@ std::string ParseTree::inOrder() {
 	}
 
 	return xOutput.str();
-
-//	// Provide a clean tree.
-//	vDestroyTree(xRoot);
-//
-//	// Rebuild the tree after ensuring there is no existing data
-//	vConstructTree();
-//
-//	/*
-//	*   The inOrder algorithm is a bit different from the others in that it builds the tree and output string at the same time
-//	*   Do not call vClearOutStream() or pop off the stack here!
-//	*/
-//	vInorderToPostfix(xRoot);
-//
-//	// xOutput buffer will contain the parsed expression
-//	return xOutput.str();
 }
 
 std::string ParseTree::postOrder() {
@@ -456,7 +595,7 @@ void ParseTree::parseInOrder(std::string str) {
 
 	// Build a stack from the input to an inOrder expression.
 	// This will eventually convert the string into a post-order tree.
-	vInorderToPostfix();
+	vStrInfixToPostfix();
 
 	// Pop and add all elements to output buffer.
 	while (!xStr.empty()) {
@@ -545,71 +684,4 @@ void ParseTree::parsePostFix(std::string str) {
 	exprType = POSTFIX;
 }
 
-void ParseTree::vBuildStackInorder(Node *n) {
 
-/*	 Note: in some cases, flagging character value as null can be helpful here.
-	       however it probably is not necessary for the leaf nodes as they get deleted progressively
-	       I am keeping it in for consistency and good practice to init/de-init values.*/
-	if (n) {
-
-		// Special case: add empty left parenthesis at start of algo
-		if (xStr.empty()) {
-			xStr.push_back(std::optional<char>('('));
-		}
-
-		if (n->left) {
-			return vBuildStackInorder(n->left);
-		}
-
-		if (n == xRoot && n->value) {
-			xStr.push_back(n->value);
-			n->value = std::nullopt;
-			return vBuildStackInorder(xRoot);
-		}
-
-		if (n->value && xIsOperator(*n->value)) {
-			xStr.push_back(n->value);
-			n->value = std::nullopt;
-			return vBuildStackInorder(xRoot);
-		}
-
-		if (n->head) {
-			if (n == n->head->right && n->value) {
-				xStr.push_back(n->value);
-				xStr.push_back(std::optional<char>(')'));
-				n->value = std::nullopt;
-			}
-		}
-
-		if (n->value && !xIsOperator(*n->value)) {
-			xStr.push_back(std::optional<char>('('));
-			xStr.push_back(n->value);
-			n->value = std::nullopt;
-		}
-
-		if (n->right) {
-			return vBuildStackInorder(n->right);
-		}
-
-		// Special case: push right parenthesis if end of algo
-		if (n == xRoot) {
-			xStr.push_back(std::optional<char>(')'));
-			xRoot = nullptr;
-		}
-		else {
-			if (n == n->head->left) {
-				n->head->left = nullptr;
-			}
-			if (n == n->head->right) {
-				n->head->right = nullptr;
-			}
-		}
-
-		delete n;
-
-		if (xRoot) {
-			return vBuildStackInorder(xRoot);
-		}
-	}
-
-}

@@ -65,20 +65,22 @@ private:
 	// returned by ParseTree::inOrder();
 	void vBuildStackInorder(Node *n = nullptr);
 
-	// Builds the container stack in inOrder notation. It can then be popped and
-	// returned by inOrder();
-	void vInorderToPostfix(Node *n = nullptr);
+	// Returns the input string as as simplified inOrder expression (parenthesis need-only basis)
+	void vBuildStackInorderSimple(Node *n = nullptr);
+
+	// Sets xOutput to a postFix expression from a stored xInput infix expression
+	void vStrInfixToPostfix(Node *n = nullptr);
 
 public:
 	explicit ParseTree(const std::string &str = "");
 
 	~ParseTree();
 
-	// Returns the input string as a preOrder expression.
+	// Returns the input expression as preOrder expression.
 	std::string preOrder();
 
-	// Returns the input string as a inOrder expression.
-	std::string inOrder();
+	// Returns the input expression as inOrder expression.
+	std::string inOrder(bool simplified = false);
 
 	// Returns the input string as a postOrder expression.
 	std::string postOrder();

@@ -9,12 +9,15 @@
 
 class Node {
 public:
-    Node * head = nullptr;
-    Node * right = nullptr;
-    Node * left = nullptr;
-    std::optional<char> value;
+	Node *head = nullptr;
+	Node *right = nullptr;
+	Node *left = nullptr;
+	std::optional<char> value;
 
-    explicit Node(char c) {value = c;}
+	explicit Node(char c) {
+
+		value = c;
+	}
 };
 
 
