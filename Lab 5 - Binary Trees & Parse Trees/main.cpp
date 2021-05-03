@@ -10,8 +10,8 @@
 
 #include "ParseTree.hpp"
 
-//#define TEST_BASE
-//#define TEST_ADV
+#define TEST_BASE
+#define TEST_ADV
 #define TEST_THINK
 
 int main(int argc, const char *argv[]) {
