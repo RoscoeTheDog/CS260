@@ -473,10 +473,6 @@ void ParseTree::vStrInfixToPostfix(Node *n) {
 
 std::string ParseTree::inOrder(bool simplified) {
 
-//	if (exprType == INFIX) {
-//		return xInput.str();
-//	}
-
 	// Make sure output stream has no data
 	vClearOutStream();
 
@@ -554,15 +550,6 @@ std::string ParseTree::preOrder() {
 
 	// Recursively build the stack in preOrder notation
 	vBuildStackPreorder(xRoot);
-
-//	if (exprType == POSTFIX) {
-//		// Pop off the stack and create the output string (this->xOutput). FIFO for pre-order.
-//		while (!xStr.empty()) {
-//			xOutput << *xStr.back(); // Note: std::optional must be de-referenced
-//			xStr.pop_back();
-//		}
-//	}
-
 
 	// Pop off the stack and create the output string (this->xOutput). FIFO for pre-order.
 	while (!xStr.empty()) {

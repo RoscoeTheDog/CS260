@@ -15,6 +15,7 @@
 
 class ParseTree {
 private:
+
 	typedef enum {
 		START = 0,
 		PREFIX,
