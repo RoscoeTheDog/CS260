@@ -1,0 +1,132 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033\deflangfe1033{\fonttbl{\f0\fswiss\fprq2\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue0;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\nowidctlpar\sa80\sl276\slmult1\b\f0\fs28 CS 260 Self Evaluation for Assignment 5 \endash  Binary Search Tree\par
+\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx4590\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\b0\fs22 Your name:\par
+Aspen Mallery\cell Date:\par
+05/10/2021\cell\row\trowd\trgaph108\trleft-108\trrh593\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar Are you willing to allow your code to be used in example debugging demonstrations or documentation?\par
+
+\pard\intbl\nowidctlpar\li8100\b  Yes       \b0 No\cell\row 
+\pard\nowidctlpar\sb80\sa80\sl276\slmult1\ul\b Instructions \endash  Part 1\b0\line\ulnone This document is to be turned in alongside solution of this lab. You will use this document to indicate your status on the lab, as well as areas where you are struggling conceptually or in converting concept to code. Please use the space underneath each evaluation criteria to describe any errors you are receiving or challenges you are having implementing the required functionality for your code.\par
+
+\pard\nowidctlpar\sa80\b\fs28 Project Organization (please fill in for your language)\par
+\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\i\fs22 File Structure (C++)\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\b0\i0 Is your class split into a header and a source file?\cell 
+\pard\intbl\widctlpar\fs20 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\fs22 Does your destructor delete all nodes from the tree?\cell 
+\pard\intbl\widctlpar\fs20 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b\i\fs22 File Structure (C#)\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\b0\i0 Is your class declared in a class library, separate from your console driver?\cell 
+\pard\intbl\widctlpar\fs20\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b\i\fs22 File Structure (Python)\b0\i0\fs20\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\fs22 Is your class declared in a separate, imported file?\cell 
+\pard\intbl\widctlpar\fs20\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row 
+\pard\nowidctlpar\sa80\b\fs8\par
+\fs28 Functionality\par
+\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\fs22 Criteria\cell\row\trowd\trgaph108\trleft-108\trrh98\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9450\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\i\fs8\cell\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\fs22 Basic Class Design\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\b0\i0 Do all parts of the program compile without errors or warnings?\cell 
+\pard\intbl\widctlpar\fs20 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\fs22 Does the test program run with your class without crashing?\cell 
+\pard\intbl\widctlpar\fs20 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\fs22 Does it complete all the tests properly?                                                                                                                            Yes\fs20\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b\i\fs22 Binary Search Tree\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\b0\i0 Does insertValue work correctly?\cell 
+\pard\intbl\widctlpar Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar Does your inOrder traversal properly display values from smallest to largest?\cf1\cell 
+\pard\intbl\widctlpar\cf0 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\cf1 Do all of your traversals return the expected values?\cell 
+\pard\intbl\widctlpar\cf0 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\cf1 Does findValue work correctly?\cell 
+\pard\intbl\widctlpar\cf0 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\cf1 Does deleteValue work correctly?\cf0\cell 
+\pard\intbl\widctlpar Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b\i FindNext Search Tree\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\cf1\b0\i0 Does the findLarger method return the closest value that is greater than or equal to the value requested?\cell 
+\pard\intbl\widctlpar\cf0 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9180\clvertalc\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\cf1 Does the deleteLarger method work properly?\cell 
+\pard\intbl\widctlpar\cf0 Yes\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row 
+\pard\widctlpar\sa200\sl276\slmult1\par
+
+\pard\nowidctlpar\sb80\sa80\sl276\slmult1\ul\b Instructions \endash  Part 2 \b0\line\ulnone Please answer the following questions, in your own words, regarding your experiences throughout this lab.\par
+
+\pard\nowidctlpar\sa80\b\fs28 Experiential Review\par
+\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\fs22 What aspects of this lab did you find most challenging?\cell\row\trowd\trgaph108\trleft-108\trrh1656\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx9450\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\b0\fs20\cell\b\i\fs8\cell\row\trowd\trgaph108\trleft-108\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\nowidctlpar\i0\fs22 What concept from this lab do you feel you have the best grasp on now?\i\cell\row\trowd\trgaph108\trleft-108\trrh1656\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b0\i0\fs20\cell\row\trowd\trgaph108\trleft-108\trrh305\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b\fs22 What must be true for a binary search tree to be efficient?\b0\fs20\cell\row\trowd\trgaph108\trleft-108\trrh1656\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trrh287\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b\fs22 Describe in your own words how binary search trees achieve their Big O efficiency:\b0\fs20\cell\row\trowd\trgaph108\trleft-108\trrh1673\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row\trowd\trgaph108\trleft-108\trrh242\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\b\fs22 Compare and contrast the efficiency of using a binary search tree vs other search methods you have used. Include Big O efficiencies.\b0\fs20\cell\row\trowd\trgaph108\trleft-108\trrh1656\trbrdrl\brdrs\brdrw10\brdrcf1 \trbrdrt\brdrs\brdrw10\brdrcf1 \trbrdrr\brdrs\brdrw10\brdrcf1 \trbrdrb\brdrs\brdrw10\brdrcf1 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\brdrcf1\clbrdrt\brdrw10\brdrs\brdrcf1\clbrdrr\brdrw10\brdrs\brdrcf1\clbrdrb\brdrw10\brdrs\brdrcf1 \cellx10710 
+\pard\intbl\widctlpar\cell\row 
+\pard\nowidctlpar\sa200\sl276\slmult1\fs22\par
+}
+ 
