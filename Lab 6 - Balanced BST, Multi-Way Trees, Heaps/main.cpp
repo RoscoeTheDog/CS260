@@ -11,15 +11,14 @@
 
 // basic lab requirements
 #define TEST_INSERT_INORDER
-//#define TEST_FIND
-//#define TEST_DELETE
+#define TEST_FIND
+#define TEST_DELETE
 //// advanced lab requirements
-//#define TEST_FIND_LARGER
-//#define TEST_DELETE_LARGER
+#define TEST_FIND_LARGER
+#define TEST_DELETE_LARGER
 
 int main()
 {
-
 #ifdef TEST_INSERT_INORDER
 	Tree fir;
 	int int_values[]=  {16, 8, 24, 4, 12, 20, 28, 2, 6, 10, 14, 18, 22, 26, 30};

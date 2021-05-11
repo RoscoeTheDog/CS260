@@ -7,24 +7,26 @@
 
 
 #include <string>
-//#include <sstream>
-//#include <optional>
+#include <sstream>
+#include <optional>
 #include <stdexcept>
 #include "Node.hpp"
 
 class Tree {
 
 private:
-	Node *root = nullptr;
-	Node *tail = nullptr;  // tail is representative of an arbitrary cursor position. Sometimes considered the 'last' successful push.
-	bool removeFound = false;
-	std::string S = "";
+	Node *root;
+	Node *tail;  // tail is representative of an arbitrary cursor position. Sometimes considered the 'last' successful push.
+	bool removeFound;
+	std::stringstream S;
 
 public:
 
-//	Tree();
-//
-//	~Tree();
+	Tree();
+
+	~Tree();
+
+	bool recursiveDelete(Node *n = nullptr);
 
 	// add a new node containing value to the tree
 	void insertValue(int val, Node *n = nullptr);
@@ -35,7 +37,7 @@ public:
 	//	if there is a node in the tree containing value, remove it and return
 	//	true. If there is not such a node, return false. For this implementation, you should mark it as
 	//	removed, not actually remove the node.
-	bool deleteValue(int val);
+	bool removeValue(int val);
 
 	//	return a string containing a prefix listing of the tree’s contents. If a node was
 	//  deleted, add a D to its value.
@@ -52,10 +54,10 @@ public:
 	// search for a node containing value and return value if such a node is
 	//  found. If no such node is found, return the next larger value in the tree. If there are no larger
 	//  values in the tree, return -1.
-	std::optional<int> findLarger(int val, Node *n = nullptr);
+	int findLarger(int val, Node *n = nullptr);
 
 	// similar to findLarger but deletes the node before returning
-	std::optional<int> deleteLarger(int val);
+	int deleteLarger(int val);
 
 	// Implement a delete node method that uses the inorder successor as described in the Moodle
 	// documentation.

@@ -12,12 +12,15 @@ public:
 	Node *head = nullptr;
 	Node *left = nullptr;
 	Node *right = nullptr;
-	int value;
+	std::optional<int> value;
 	bool DELETED = false;
+
+	Node(){};
 
 	explicit Node(int value) {
 
 		this->value = value;
+		DELETED = false;
 	}
 };
 
