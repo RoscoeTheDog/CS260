@@ -6,11 +6,12 @@
 #define LAB_7___HEAPS_AND_RECURSIVE_SORTS_HEAP_HPP
 
 #include <algorithm>
+#include <stdexcept>
+#include <iostream>
 
 typedef enum {
 	BASE_1 = 0,
 	BASE_0 = 1,
-
 } HeapBase_t;
 
 typedef enum {
@@ -21,9 +22,10 @@ typedef enum {
 class Heap {
 private:
 	// Note: our heap will be implemented as base 1 to simplify indices expressions
-	int *heap;
+	int *heap = nullptr;
 	int size;
 	int length;
+	int height;
 	HeapBase_t root;
 	bool open;
 
@@ -43,6 +45,8 @@ private:
 
 	int xGetParent(int position);
 
+	void vResizeArray(int size);
+
 public:
 	explicit Heap(int size = 10, HeapBase_t baseType = BASE_0);
 
@@ -53,6 +57,8 @@ public:
 
 	// removes and returns the smallest item from the heap
 	int getItem();
+
+	void vDumpArray();
 
 };
 

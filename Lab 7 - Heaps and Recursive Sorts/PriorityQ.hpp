@@ -5,16 +5,21 @@
 #ifndef LAB_7___HEAPS_AND_RECURSIVE_SORTS_PRIORITYQ_HPP
 #define LAB_7___HEAPS_AND_RECURSIVE_SORTS_PRIORITYQ_HPP
 
+#include "Heap.hpp"
 
-class PriorityQ {
+class PriorityQueue {
+private:
+	Heap heap;
 
-	PriorityQ();
+public:
 
-	~PriorityQ();
+	PriorityQueue();
 
-	void addItem();
+	~PriorityQueue();
 
-	void getItem();
+	void addItem(int value);
+
+	int getItem();
 
 };
 

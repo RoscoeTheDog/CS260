@@ -8,11 +8,12 @@
 Heap::Heap(int size, HeapBase_t baseType) {
 
 	root = baseType;
-	length = baseType;  // starting length depends on the baseType of the heap implemented
 	this->size = size;
+	length = baseType;  // starting length depends on the baseType of the heap implemented
+	height = baseType;
 	open = LEAF_LEFT;
 	// allocate array.
-	heap = new int[length];
+	heap = new int[size];
 }
 
 Heap::~Heap() {
@@ -23,8 +24,9 @@ Heap::~Heap() {
 
 void Heap::addItem(int value) {
 
-	int left = xGetLeft(root);
-	int right = xGetRight(root);
+	if (length > size - 1) {
+		vResizeArray(this->size * 2);
+	}
 
 	if (length == root) {
 		heap[root] = value;
@@ -32,16 +34,18 @@ void Heap::addItem(int value) {
 		return;
 	}
 
+	int left = xGetLeft(length);
+	int right = xGetRight(length);
+
 	// insert item into the array. Then invoke helper that sifts/trickles down.
 	if (open == LEAF_LEFT) {
 
 		// insert value
-		heap[left] = value;
+		heap[length] = value;
 		// increment num elements
 		length++;
 		// bubble/sift. will exit if !valid
-		vSiftUp(length);
-
+		vSiftUp(length - 1);
 		// toggle available position.
 		open = !open;
 		// exit
@@ -50,11 +54,11 @@ void Heap::addItem(int value) {
 
 	if (open == LEAF_RIGHT) {
 		// insert right position.
-		heap[right] = value;
+		heap[length] = value;
 		// increment num elements
 		length++;
 		// bubble/sift up and heapify.
-		vSiftUp(length);
+		vSiftUp(length - 1);
 
 		// toggle available position.
 		open = !open;
@@ -65,10 +69,14 @@ void Heap::addItem(int value) {
 
 int Heap::getItem() {
 
-	int _v = heap[root];
+	if (length == root) {
+		throw std::out_of_range("Heap is empty");
+	}
 
-	// overwrite the root with the last inserted item && decriment.
-	heap[root] = heap[length--];
+	// save before writing over
+	int _v = heap[root];
+	// write over the root with the last inserted item && decrement length.
+	heap[root] = heap[--length];
 	// trickleDown/heapify the new root.
 	vSiftDown(root);
 	// toggle the open position so we overwrite the extra node at tail (L/R).
@@ -97,117 +105,111 @@ void Heap::vSiftUp(int position) {
 		// Swap the parent and the leaf.
 		std::swap(heap[position], heap[parent]);
 		// traverse to the parent
-		return vSiftUp(heap[parent]);
+		return vSiftUp(parent);
 	}
 
 }
 
 void Heap::vSiftDown(int position) {
-
 	int left = xGetLeft(position);
 	int right = xGetRight(position);
 
-	// exit if parent is less than child.
-	if (heap[position] < heap[left] && heap[position < heap[right]]) {
+	// exit if reached bottom of tree
+	if (position > length || left > length || right > length) {
 		return;
 	}
 
-	// compare left
-	if (heap[position] > heap[left]) {
-		std::swap(heap[position], heap[left]);
-		return vSiftDown(heap[position]);
+	// exit if parent/current node is less than child.
+	if (heap[position] < heap[left] && heap[position] < heap[right]) {
+		return;
 	}
 
-	// compare right
-	if (heap[position] > heap[right]) {
+	// Compare the left and right children. Swap with the smallest.
+	if (heap[left] < heap[right] && heap[left] < heap[position]) {
+		std::swap(heap[position], heap[left]);
+		return vSiftDown(left);
+	}
+	if (heap[right] < heap[left] && heap[right] < heap[position]) {
 		std::swap(heap[position], heap[right]);
-		return vSiftDown(position);
+		return vSiftDown(right);
 	}
 
 }
 
 void Heap::vReplaceDown(int position) {
 
-	if (root == BASE_0) {
+	int parent = xGetParent(position);
+	int left = xGetLeft(position);
+	int right = xGetRight(position);
 
-		// Check for duplicates on the left
-		if (heap[position] == heap[2 * position]) {
-			return vReplaceDown(2 * position);
-		}
-
-		// Check for duplicates on the left
-		if (heap[position] == heap[2 * position + 1]) {
-			return vReplaceDown(2 * position + 1);
-		}
-
-		// check if left subtree/leaf is less than right
-		if (heap[2 * position] < heap[2 * position + 1]) {
-
-			// if we hit the bottom of the tree, rearrange the leafs.
-			if (2 * position > length) {
-
-				// Overwrite everything from duplicate onward by the +1 the right relative.
-				for (int i = position; i < length; ++i) {
-					heap[i] = heap[i + 1];
-				}
-
-				// SiftDown/Heapify the array after.
-				vSiftDown(root);
-
-				// Toggle available leaf positions so we overwrite.
-				if (open == LEAF_LEFT) {
-					open = LEAF_RIGHT;
-				}
-				if (open == LEAF_RIGHT) {
-					open = LEAF_LEFT;
-				}
-
-				// decrement the length-- should overwrite the last remaining node.
-				length--;
-			}
-			else {
-				// overwrite the current position (parent).
-				heap[position] = heap[2 * position];
-				// go to left node.
-				return vSiftDown(2 * position);
-			}
-
-		}
-
-		// check if left subtree/leaf is less than right
-		if (heap[2 * position] > heap[2 * position + 1]) {
-
-			// if we hit the bottom of the tree, rearrange the leafs.
-			if (2 * position + 1 > length) {
-
-				// Overwrite everything from duplicate onward by the +1 the right relative.
-				for (int i = position; i < length; ++i) {
-					heap[i] = heap[i + 1];
-				}
-
-				// SiftDown/Heapify the array after.
-				vSiftDown(root);
-
-				// Toggle available leaf positions so we overwrite.
-				if (open == LEAF_LEFT) {
-					open = LEAF_RIGHT;
-				}
-				if (open == LEAF_RIGHT) {
-					open = LEAF_LEFT;
-				}
-
-				// decrement the length-- should overwrite the last remaining node.
-				length--;
-			}
-			else {
-				// overwrite the current position (parent).
-				heap[position] = heap[2 * position + 1];
-				// go to right node.
-				return vSiftDown(2 * position + 1);
-			}
-
-		}
+	// Check for duplicates on the left
+	if (heap[position] == heap[left]) {
+		return vReplaceDown(left);
 	}
+
+	// Check for duplicates on the right
+	if (heap[position] == heap[right]) {
+		return vReplaceDown(right);
+	}
+
+	// check if left subtree/leaf is less than right
+	if (heap[left] < heap[right]) {
+
+		// if we hit the bottom of the tree, rearrange the leafs.
+		if (left > length) {
+
+			// Overwrite everything from duplicate onward by the +1 the right relative.
+			for (int i = position; i < length; ++i) {
+				heap[i] = heap[i + 1];
+			}
+
+			// SiftDown/Heapify the array after.
+			vSiftDown(root);
+
+			// Toggle available leaf positions so we overwrite.
+			open = !open;
+
+			// decrement the length-- should overwrite the last remaining node.
+			length--;
+		}
+		else {
+			// overwrite the current position (parent).
+			heap[position] = heap[left];
+			// go to left node.
+			return vSiftDown(left);
+		}
+
+	}
+
+	// check if left subtree/leaf is less than right
+	if (heap[left] > heap[right]) {
+
+		// if we hit the bottom of the tree, rearrange the leafs.
+		if (right > length) {
+
+			// Overwrite everything from duplicate onward by the +1 the right relative.
+			for (int i = position; i < length; ++i) {
+				heap[i] = heap[i + 1];
+			}
+
+			// SiftDown/Heapify the array after.
+			vSiftDown(root);
+
+			// Toggle available leaf positions so we overwrite.
+			open = !open;
+
+			// decrement the length-- should overwrite the last remaining node.
+			length--;
+		}
+		else {
+			// overwrite the current position (parent).
+			heap[position] = heap[right];
+			// go to right node.
+			return vSiftDown(right);
+		}
+
+	}
+
 }
 
 int Heap::xGetParent(int position) {
@@ -247,4 +249,34 @@ int Heap::xGetRight(int position) {
 	}
 
 	return -1;
+}
+
+void Heap::vResizeArray(int size) {
+	// catch if we are losing data.
+	if (length > size) {
+		throw std::out_of_range("Cannot shrink heap with existing elements!");
+	}
+	// allocate new array
+	int *_tmp = new int[size];
+	// deep copy
+	memcpy(_tmp, heap, sizeof(int) * this->size);
+	// delete old
+	delete[] heap;
+	// update new
+	heap = _tmp;
+	// update size
+	this->size = size;
+}
+
+void Heap::vDumpArray() {
+
+	std::cout << std::endl;
+
+	std::cout << "Dumping array: " << std::endl;
+
+	for (int i = 1; i < length; ++i) {
+		std::cout << heap[i] << " ";
+	}
+
+	std::cout << std::endl;
 }
