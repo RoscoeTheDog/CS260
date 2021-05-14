@@ -23,6 +23,9 @@ Heap::~Heap() {
 
 void Heap::addItem(int value) {
 
+	int left = xGetLeft(root);
+	int right = xGetRight(root);
+
 	if (length == root) {
 		heap[root] = value;
 		length++;
@@ -32,41 +35,29 @@ void Heap::addItem(int value) {
 	// insert item into the array. Then invoke helper that sifts/trickles down.
 	if (open == LEAF_LEFT) {
 
-		if (root == BASE_0) {
-			// insert value
-			heap[length++] = value;
-			// bubble/sift. will exit if !valid
-			vSiftUp(length);
+		// insert value
+		heap[left] = value;
+		// increment num elements
+		length++;
+		// bubble/sift. will exit if !valid
+		vSiftUp(length);
 
-		}
-
-		if (root == BASE_1) {
-			heap[2 * length + 1] = value;
-			length++;
-			vSiftUp(length);
-		}
-
-		// toggle leaf available position
-		open = LEAF_RIGHT;
+		// toggle available position.
+		open = !open;
+		// exit
 		return;
 	}
 
 	if (open == LEAF_RIGHT) {
+		// insert right position.
+		heap[right] = value;
+		// increment num elements
+		length++;
+		// bubble/sift up and heapify.
+		vSiftUp(length);
 
-		if (root == BASE_0) {
-			heap[2 * length + 1] = value;
-			length++;
-			vSiftUp(length);
-		}
-
-		if (root == BASE_1) {
-			heap[2 * length + 2] = value;
-			length++;
-			vSiftUp(length);
-		}
-
-		// toggle leaf available position
-		open = LEAF_LEFT;
+		// toggle available position.
+		open = !open;
 		return;
 	}
 
@@ -76,111 +67,63 @@ int Heap::getItem() {
 
 	int _v = heap[root];
 
-	if (root == BASE_0) {
-
-		if (length > 2) {
-
-			if (heap[2] < heap[3]) {
-				heap[1] = heap[2];
-				vReplaceDown(root);
-			}
-
-			if (heap[2] > heap[3]) {
-				heap[1] = heap[3];
-				vReplaceDown(root);
-			}
-
-		}
-		else if (length > 1) {
-
-			if (heap[2] < heap[1]) {
-				heap[1] = heap[2];
-				vReplaceDown(root);
-			}
-		}
-
-	}
+	// overwrite the root with the last inserted item && decriment.
+	heap[root] = heap[length--];
+	// trickleDown/heapify the new root.
+	vSiftDown(root);
+	// toggle the open position so we overwrite the extra node at tail (L/R).
+	open = !open;
+	// the next insert will now overwrite the last position.
 
 	return _v;
 }
 
 void Heap::vSiftUp(int position) {
 
-	// if we sifted to the root, exit.
+	int parent = xGetParent(position);
+
+	// exit if @ root.
 	if (position == root) {
 		return;
 	}
 
-	if (root == BASE_0) {
-		// exit if parent is less than iterated position.
-		if (heap[position] >= heap[position / 2]) {
-			return;
-		}
-
-		if (heap[position] < heap[position / 2]) {
-			// Swap the parent and the leaf.
-			std::swap(heap[position], heap[position / 2]);
-			// traverse to the parent
-			return vSiftUp(heap[position / 2]);
-		}
+	// exit if parent less than current node
+	if (heap[position] > heap[parent]) {
+		return;
 	}
 
-	if (root == BASE_1) {
-		// exit if parent is less than iterated position.
-		if (heap[position + 1] >= heap[(position - 1) / 2]) {
-			return;
-		}
-
-		if (heap[position + 1] < heap[(position - 1) / 2]) {
-			// Swap the parent and the leaf.
-			std::swap(heap[position + 1], heap[(position - 1) / 2]);
-			// traverse to the parent
-			return vSiftUp(heap[(position - 1) / 2]);
-		}
+	// go up the tree if current is less than parent
+	if (heap[position] < heap[parent]) {
+		// Swap the parent and the leaf.
+		std::swap(heap[position], heap[parent]);
+		// traverse to the parent
+		return vSiftUp(heap[parent]);
 	}
-
 
 }
 
 void Heap::vSiftDown(int position) {
 
-	if (root == BASE_0) {
+	int left = xGetLeft(position);
+	int right = xGetRight(position);
 
-		// exit if parent is less than child.
-		if (heap[position] < heap[2 * position] && heap[position < heap[2 * position + 1]]) {
-			return;
-		}
-
-		// compare left
-		if (heap[position] > heap[2 * position]) {
-			std::swap(heap[position], heap[2 * position]);
-			return vSiftDown(heap[position]);
-		}
-
-		// compare right
-		if (heap[position] > heap[2 * position + 1]) {
-			std::swap(heap[position], heap[2 * position + 1]);
-		}
+	// exit if parent is less than child.
+	if (heap[position] < heap[left] && heap[position < heap[right]]) {
+		return;
 	}
 
-	if (root == BASE_1) {
-
-		// exit if parent is less than child.
-		if (heap[position] < heap[2 * position + 1] && heap[position < heap[2 * position + 2]]) {
-			return;
-		}
-
-		// compare left
-		if (heap[position] > heap[2 * position + 1]) {
-			std::swap(heap[position], heap[2 * position + 1]);
-			return vSiftDown(heap[position]);
-		}
-
-		// compare right
-		if (heap[position] > heap[2 * position + 2]) {
-			std::swap(heap[position], heap[2 * position + 2]);
-		}
+	// compare left
+	if (heap[position] > heap[left]) {
+		std::swap(heap[position], heap[left]);
+		return vSiftDown(heap[position]);
 	}
+
+	// compare right
+	if (heap[position] > heap[right]) {
+		std::swap(heap[position], heap[right]);
+		return vSiftDown(position);
+	}
+
 }
 
 void Heap::vReplaceDown(int position) {
@@ -267,3 +210,41 @@ void Heap::vReplaceDown(int position) {
 	}
 }
 
+int Heap::xGetParent(int position) {
+
+	if (root == BASE_0) {
+		return position / 2;
+	}
+	if (root == BASE_1) {
+		return (position - 1) / 2;
+	}
+
+	return -1;
+}
+
+
+int Heap::xGetLeft(int position) {
+
+	if (root == BASE_0) {
+		return 2 * position;
+	}
+	if (root == BASE_1) {
+		return 2 * position + 1;
+	}
+
+	return -1;
+
+}
+
+
+int Heap::xGetRight(int position) {
+
+	if (root == BASE_0) {
+		return 2 * position + 1;
+	}
+	if (root == BASE_1) {
+		return 2 * position + 2;
+	}
+
+	return -1;
+}

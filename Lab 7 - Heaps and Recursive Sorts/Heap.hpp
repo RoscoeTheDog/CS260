@@ -25,7 +25,7 @@ private:
 	int size;
 	int length;
 	HeapBase_t root;
-	HeapLeaf_t open;
+	bool open;
 
 	// Heapify the array.
 	void vHeapify();
@@ -34,14 +34,14 @@ private:
 
 	void vSiftDown(int position);
 
-	// Similar to vSiftDown, except it catches eq values as it goes
+	// DEPRECATED: Similar to vSiftDown, except it catches eq values as it goes
 	void vReplaceDown(int position);
 
-	int xGetLeft(int i);
+	int xGetLeft(int position);
 
-	int xGetRight(int i);
+	int xGetRight(int position);
 
-	int xGetParent(int i);
+	int xGetParent(int position);
 
 public:
 	explicit Heap(int size = 10, HeapBase_t baseType = BASE_0);
