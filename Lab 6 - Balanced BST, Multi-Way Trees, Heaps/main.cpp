@@ -109,8 +109,6 @@ int main()
 	for(int i = 0; i < NUM_NUMS; i++)
 		apple.insertValue(nums[i]);
 
-
-
 	std::cout << "\n Values in order for findLarger test" << std::endl;
 	std::cout << "  " << apple.inOrder() << std::endl;
 	std::cout << "\n Now testing findLarger" << std::endl;
