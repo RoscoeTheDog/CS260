@@ -10,11 +10,11 @@
 
 class Node{
 public:
-    Node * head;
+    Node * prev;
     Node * next;
-    std::optional<char32_t> value;
+    std::optional<char> value;
 
-    Node() { head = nullptr; next = nullptr; }
+    Node() { prev = nullptr; next = nullptr; }
 
     ~Node()= default;
 

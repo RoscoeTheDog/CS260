@@ -12,53 +12,54 @@
 
 #define LinkedList TextClass
 
-class LinkedList
-{
+class LinkedList {
 private:
-    Node *head;
-    Node *tail;
-    Node *lastNode;
+	Node *head;
+	Node *tail;
+	// lastFound holds a reference to the last node that is not cleared after invoking findNext.
+	Node *lastFound;
 
 public:
 
-    LinkedList()
-    {
-        this->head = nullptr;
-        this->tail = nullptr;
-        this->lastNode = nullptr;
-    }
+	LinkedList() {
 
-    ~LinkedList()
-    {
-        while (this->head)
-            removeHead();
-    }
+		head = nullptr;
+		tail = nullptr;
+		lastFound = nullptr;
+	}
 
-    void addHead(char32_t value);
+	~LinkedList() {
 
-    void addTail(char32_t value);
+		while (head) {
+			removeHead();
+		}
+	}
 
-    char32_t getHead();;
+	void addHead(char value);
 
-    char32_t getTail();;
+	void addTail(char value);
 
-    void removeHead();
+	char getHead();;
 
-    void removeTail();
+	char getTail();;
 
-    bool find(char32_t value);
+	void removeHead();
 
-    bool findRemove(char32_t value);
+	void removeTail();
 
-    std::string displayList();
+	bool find(char value);
 
-    void append(LinkedList List);
+	bool findRemove(char value);
 
-    bool findNext(char32_t value);
+	std::string displayList();
 
-    void removeLast();
+	void append(LinkedList List);
 
-    void insertLast(char32_t value);
+	bool findNext(char value, Node *n = nullptr);
+
+	void removeLast();
+
+	void insertLast(char value);
 
 };
 
