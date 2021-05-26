@@ -5,37 +5,23 @@
 #include "RecSorts.hpp"
 
 
-void heapSort(int arr[], int length, int position) {
-
-	int parent = xGetParent(position);
-	int left = xGetLeft(position);
-	int right = xGetRight(position);
+void heapSort(int arr[], int length) {
 
 	if (length < 0) {
 		throw std::out_of_range("length must be greater than 0");
 	}
-
-	int items[length];
-	memcpy(items, arr, sizeof(int) * length);
 
 	// heapify the array. Array is 0 indexed but last parent is (length/2) - 1. Pass i - 1 here
 	for (int i = (length/2); i > 0; --i) {
 		vSiftDownMax(arr, length, i - 1);
 	}
 
-	memcpy(items, arr, sizeof(int) * length);
-
-	int _l = length;
-
 	for (int i = length - 1; i > 0; --i) {
-		std::swap(items[0], items[i]);
+		std::swap(arr[0], arr[i]);
 		// trickleDown/heapify the new root.
-		vSiftDownMin(items, length, 0);
+		vSiftDownMax(arr, i - 1, 0);
 		// the next call will now swap/sort the last position.
 	}
-
-
-	while(1) {};
 
 }
 
@@ -49,7 +35,7 @@ void vSiftDownMax(int arr[], int length, int position) {
 		return;
 	}
 
-	// exit if parent/current node is less than child.
+	// exit if parent/current node is greater than child.
 	if (arr[position] > arr[left] && arr[position] > arr[right]) {
 		return;
 	}
@@ -84,11 +70,11 @@ void vSiftDownMin(int arr[], int length, int position) {
 	// Compare the left and right children. Swap with the largest.
 	if (arr[left] < arr[right] && arr[left] < arr[position]) {
 		std::swap(arr[position], arr[left]);
-		return vSiftDownMax(arr, length, left);
+		return vSiftDownMin(arr, length, left);
 	}
 	if (arr[right] < arr[left] && arr[right] < arr[position]) {
 		std::swap(arr[position], arr[right]);
-		return vSiftDownMax(arr, length, right);
+		return vSiftDownMin(arr, length, right);
 	}
 
 }
