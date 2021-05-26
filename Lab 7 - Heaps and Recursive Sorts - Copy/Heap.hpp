@@ -14,42 +14,37 @@ typedef enum {
 	BASE_0 = 1,
 } HeapBase_t;
 
-typedef enum {
-	LEAF_LEFT = 0,
-	LEAF_RIGHT,
-} HeapLeaf_t;
-
 class Heap {
 private:
 	// Note: our heap will be implemented as base 1 to simplify indices expressions
 	int *heap = nullptr;
 	int size;
 	int length;
-	int height;
 	HeapBase_t root;
-	bool open;
 
-	// Heapify the array.
-	void vHeapify();
-
+	// "Sift Up": Identical to bubble up. Brings the smallest value element to the top of the tree from the bottom up.
 	void vSiftUp(int position);
 
+	// "Sift Down" Identical to 'trickle down'. Brings the largest values from root to a deeper height in the tree.
 	void vSiftDown(int position);
 
-	// DEPRECATED: Similar to vSiftDownMax, except it catches eq values as it goes
-	void vReplaceDown(int position);
-
+	// Helper that makes code syntax cleaner. If using base 0, then it is 2*i
 	int xGetLeft(int position);
 
+	// Helper that makes code syntax cleaner. If using base 0, then it is 2*i + 1
 	int xGetRight(int position);
 
+	// Helper that makes code syntax cleaner. If using base 0, then it is i/2;
 	int xGetParent(int position);
 
+	// Helper that resizes the array for when it fills.
 	void vResizeArray(int size);
 
 public:
+	// Constructor. Can specify the size or what baseType to use.
 	explicit Heap(int size = 10, HeapBase_t baseType = BASE_0);
 
+	// Destructor. Cleans up the dynamic array.
 	~Heap();
 
 	// adds a new item to the heap
@@ -58,6 +53,7 @@ public:
 	// removes and returns the smallest item from the heap
 	int getItem();
 
+	// Dumps the array, helpful for debugging.
 	void vDumpArray();
 
 };

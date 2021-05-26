@@ -11,28 +11,34 @@
 
 // TESTHEAP and TESTPRIORITYQ are Base Lab
 #define TESTHEAP
-//#define TESTPRIORITYQ
+#define TESTPRIORITYQ
 
+// TESTHEAPSORT, TESTMERGESORT, TESTQUICKSORT are Advanced Lab
+#define TESTHEAPSORT
+//#define TESTMERGESORT
+//#define TESTQUICKSORT
+//
+//// TESTFINDNTH is Thinking Problem
+//#define TESTFINDNTH
 
 #ifdef TESTHEAP
-
 #include "Heap.hpp"
-
 #endif
 
 #ifdef TESTPRIORITYQ
 #include "PriorityQ.hpp"
 #endif
 
-#include "RecSorts.hpp"
-
+#if defined TESTHEAPSORT || defined TESTMERGESORT || defined TESTQUICKSORT
+#include "recSorts.hpp"
+#endif
 
 using std::cout;
 using std::endl;
 
 
-int main() {
-
+int main()
+{
 	const int NUM_VALUES = 15;
 
 #ifdef TESTHEAP
@@ -43,25 +49,15 @@ int main() {
 
 	// load the heap with values
 	cout << "Now filling it with 15 values, should cause doubling of size" << endl << endl;
-	for (int i = 0; i < NUM_VALUES; i++) {
+	for(int i = 0; i < NUM_VALUES; i++)
 		pile.addItem(heapVals[i]);
-	}
-
-	cout << "Now testing heapsort: " << std::endl;
-	heapSort(heapVals, NUM_VALUES);
-	for (int i = 0; i < NUM_VALUES; i++) {
-		cout << heapVals[i] << " ";
-	}
-	cout << endl;
 
 	// remove values, should be in ascending order
 	cout << "Now removing values to see if properly ordered" << endl;
 	cout << " In order s/b: 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75" << endl;
 	cout << " Actual order: ";
-	for (int i = 0; i < NUM_VALUES; i++) {
-		cout << pile.getItem() << " ";
-	}
-
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << pile.getItem() << " " ;
 	cout << endl << endl;
 
 	// now test for taking one too many
@@ -111,6 +107,103 @@ int main() {
 
 #endif // TESTPRIORITYQ
 
+#ifdef TESTHEAPSORT
+	int heapArray[NUM_VALUES] = {41, 2, 3, 5, 13, 17, 43, 23, 29, 7, 11, 19, 31, 37, 47};
+
+	// show starting array
+	cout << "Starting array is " << endl;
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << heapArray[i] << " ";
+	cout << endl;
+
+	// now sort it
+	heapSort(heapArray, NUM_VALUES);
+
+	// show updated array, should be in ascending order
+	cout << "Now the array should be sorted" << endl;
+	cout << " expected: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47" << endl;
+	cout << " actually: ";
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << heapArray[i] << " ";
+	cout << endl;
+
+	cout << endl << "Done with testing heap sort" << endl << endl;
+
+#endif // TESTHEAPSORT
+
+#ifdef TESTMERGESORT
+	int mergeArray[NUM_VALUES] = {41, 2, 3, 5, 13, 17, 43, 23, 29, 7, 11, 19, 31, 37, 47};
+
+	// show starting array
+	cout << "Starting array is " << endl;
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << mergeArray[i] << " ";
+	cout << endl;
+
+	// now sort it
+	mergeSort(mergeArray, NUM_VALUES);
+
+	// show updated array, should be in ascending order
+	cout << "Now the array should be sorted" << endl;
+	cout << " expected: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47" << endl;
+	cout << " actually: ";
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << mergeArray[i] << " ";
+	cout << endl;
+
+	cout << endl << "Done with testing merge sort" << endl << endl;
+
+#endif // TESTMERGESORT
+
+#ifdef TESTQUICKSORT
+	int quickArray[NUM_VALUES] = {41, 2, 3, 5, 13, 17, 43, 23, 29, 7, 11, 19, 31, 37, 47};
+
+	// show starting array
+	cout << "Starting array is " << endl;
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << quickArray[i] << " ";
+	cout << endl;
+
+	// now sort it
+	quickSort(quickArray, NUM_VALUES);
+
+	// show updated array, should be in ascending order
+	cout << "Now the array should be sorted" << endl;
+	cout << " expected: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47" << endl;
+	cout << " actually: ";
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << quickArray[i] << " ";
+	cout << endl;
+
+	cout << endl << "Done with testing quick sort" << endl << endl;
+
+#endif // TESTQUICKSORT
+
+#ifdef TESTFINDNTH
+	int findArray[NUM_VALUES] = {41, 2, 3, 5, 13, 17, 43, 23, 29, 7, 11, 19, 31, 37, 47};
+
+	// show starting array
+	cout << "Starting array is " << endl;
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << findArray[i] << " ";
+	cout << endl;
+
+	// now find the value
+	cout << "Finding 7th value, should be 19 " << endl;
+	cout << " actually is: ";
+	cout << findNth(findArray, NUM_VALUES, 7) << endl;
+
+
+	// show updated array, should be in partially sorted order
+	cout << "Now the array should be partially sorted" << endl;
+	cout << " actually: ";
+	for(int i = 0; i < NUM_VALUES; i++)
+		cout << findArray[i] << " ";
+	cout << endl;
+
+	cout << endl << "Done with testing findNth " << endl << endl;
+
+#endif // TESTFINDNTH
 
 	return 0;
 }
