@@ -152,6 +152,19 @@ int *xMerge(int *bottom, int *top, int bottom_length, int top_length) {
 	int index_1 = 0;
 	int index_2 = 0;
 
+
+//	for (int i = 0; i < bottom_length; ++i) {
+//
+//		for (int j = 0; j < top_length; ++j) {
+//
+//			if (bottom[i] < top[j]) {
+//				destination = bottom[i];
+//			}
+//
+//		}
+//
+//	}
+
 	// Snippit taken from 'MergeSort.pdf' by Jim Bailey.
 	while (index_1 < bottom_length && index_2 < top_length) {
 
@@ -159,7 +172,7 @@ int *xMerge(int *bottom, int *top, int bottom_length, int top_length) {
 			destination[index_1] = bottom[index_1];
 			++index_1;
 		}
-		else {
+		if (bottom[index_1] > top[index_2]){
 			destination[index_2] = top[index_2];
 			++index_2;
 		}
