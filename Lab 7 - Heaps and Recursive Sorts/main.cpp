@@ -15,7 +15,7 @@
 
 // TESTHEAPSORT, TESTMERGESORT, TESTQUICKSORT are Advanced Lab
 #define TESTHEAPSORT
-//#define TESTMERGESORT
+#define TESTMERGESORT
 //#define TESTQUICKSORT
 //
 //// TESTFINDNTH is Thinking Problem
@@ -140,8 +140,11 @@ int main()
 		cout << mergeArray[i] << " ";
 	cout << endl;
 
+	int test[6] = {41, 2, 3, 5, 13, 17};
+
 	// now sort it
-	mergeSort(mergeArray, NUM_VALUES);
+	mergeSort(test, 6);
+//	mergeSort(mergeArray, NUM_VALUES);
 
 	// show updated array, should be in ascending order
 	cout << "Now the array should be sorted" << endl;
