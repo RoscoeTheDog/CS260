@@ -176,7 +176,7 @@ int *vSplit(int *source, int length, int start, int end) {
 	int *chunk = nullptr;
 	int *sorted = nullptr;
 
-	// end should never be 0 unless it's the first call
+	// check for default values. set them if we know the first call is being performed.
 	if (start == -1) {
 		start = 0;
 	}
@@ -184,31 +184,40 @@ int *vSplit(int *source, int length, int start, int end) {
 		end = length - 1;
 	}
 
-	// after splitting down the the center.
+	// Split down the center of the passed array. Then recursively call the bottom/top chunks.
+	// When the mean value of the indices equals the start value, we exit.
 	if (((start + end) / 2) != start) {
+		// some weird pointer arithmetic stuff. works well though.
 		bottom = vSplit(source, (length / 2) - 1, start, (length / 2));
 		top = vSplit(source, length, (length / 2) + 1, end);
 	}
 
+	// if we have a top and a bottom chunk, then we know we are returning up the call stack and we can begin merging sorted chunks.
 	if (top && bottom) {
-		sorted = xMerge(bottom, top);
-		delete[]top;
+		// rather than keeping track of the size of each arr independently here, we can just check the num of bytes when invoking.
+		sorted = xMerge(bottom, top, sizeof(bottom) / sizeof(int), sizeof(top) / sizeof(int));
+		delete[]top;        // clean up old chunks after merged and new arr is created.
 		delete[]bottom;
-		return sorted;
+		return sorted;      // return the sorted new chunk of mem.
 	}
 	else {
-		// if we reached here, we have hit the last chunk of the array that is of sizeof(int) * 2
-		chunk = new int[2];                  // create new array
+		// we don't know if the leftover chunk of memory is just a single element or of length two. Validate this.
+		if (start == end){
+			chunk = new int[1];
+			chunk[start] = source[start];
+		}
+		else {
+			chunk = new int[2];
+			chunk[start] = source[start];
+			chunk[end] = source[end];
 
-		// copy the values.
-		chunk[start] = source[start];
-		chunk[end] = source[end];
-
-		if (chunk[start] < chunk[end]) {
-			std::swap(chunk[start], chunk[end]);
+			// if we know there are two elements, sort them with a quick swap.
+			if (chunk[start] < chunk[end]) {
+				std::swap(chunk[start], chunk[end]);
+			}
 		}
 
-		// return the sorted smaller or larger chunk.
+		// return the sorted chunk of mem.
 		return chunk;
 	}
 
