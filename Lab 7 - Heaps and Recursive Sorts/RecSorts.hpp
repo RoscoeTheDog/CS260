@@ -28,11 +28,11 @@ void vSiftDownMax(int arr[], int length, int position);
 
 void vSiftDownMin(int arr[], int length, int position);
 
-void mergeSort(int arr[], int length, int start_1 = 0, int start_2 = -1);
+void mergeSort(int *source, int length);
 
-int* xMerge(int bottom[], int top[]);
+int &xRecursiveMergeSort(int *source, int length, int start = -1, int end = 0);
 
-int* vSplit(int *source, int length, int index_1 = -1, int index_2 = 0);
+int &xMerge(int bottom[], int top[], int bottom_length, int top_length);
 
 void quickSort(int arr[], int length);
 
