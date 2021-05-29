@@ -112,7 +112,80 @@ void vDumpArray(int arr[], int length) {
 	std::cout << std::endl;
 }
 
-int &xMerge(int bottom[], int top[], int bottom_length, int top_length) {
+void mergeSort(int *source, int length) {
+	// I tried like a million different syntaxes trying to just modify the original passed in reference
+	// but I was not getting anywhere with it. I could not change the reference address with a pointer either.
+	// I resorted just to doing a quick deep copy of the values and then deleting the extra array.
+	int *sorted = xRecursiveMergeSort(source, length);
+	memcpy(source, sorted, sizeof(int) * length);
+	delete[]sorted;
+}
+
+int *xRecursiveMergeSort(int *source, int length, int start, int end) {
+
+	int *bottom = nullptr;      // bottom half of split array.
+	int *top = nullptr;         // top half of split array.
+	int *chunk = nullptr;       // the 'working' chunk (bot/top) to be returned recursively.
+	int *sorted = nullptr;      // the final array after it's been sorted.
+
+	// check for default param values.
+	// initialize them to start and end of array length if we are at the bottom of the callstack.
+	if (start == -1) {
+		start = 0;
+	}
+	if (end == 0) {
+		end = length - 1;
+	}
+
+	// Split down the center of the passed array. Then recursively call the bottom/top chunks.
+	// When the mean of the start/end equals the start value, we have a length of <= 1 and we can exit.
+	if (((start + end) / 2) != start) {
+		// move the end position to the left side of the latest middle slice.
+		bottom = xRecursiveMergeSort(source, (length / 2) - 1, start, (start + end) / 2);
+		// increase start by last chunk length. (end - start) + 1
+		start += ((start + end) / 2) - start + 1;
+		// move the start position to the right side of the latest middle slice.
+		top = xRecursiveMergeSort(source, length, start, end);
+	}
+
+	// if we have both a valid bottom and top chunk initialized,
+	// then we know we are returning down the call stack and we can begin merging the sorted chunks.
+	if (top && bottom) {
+		// some chunks after merged may be >= 2, so we have calculate how large they are.
+		// Note: using sizeof(chunk) / sizeof(int) was giving me strange results, so I will do they pointer arithmetic thing I did before.
+		sorted = xMerge(bottom, top, end - start + 1, end - start + 1);
+		// clean up the old chunks after merged and new arr is created.
+		delete[]top;
+		delete[]bottom;
+		return sorted;  // return the new sorted and merged chunk of memory.
+	}
+		// Keep splitting if we don't have the 2 smallest halves yet.
+	else {
+		// If the length is not an even number, then we will have a chunk leftover of length 1.
+		// Validate and catch this.
+		if (start == end) {             // chunk length of 1
+			chunk = new int[1];
+			chunk[0] = source[start];
+		}
+		else {                          // chunk length of 2
+			chunk = new int[2];
+			chunk[0] = source[start];
+			chunk[1] = source[end];
+
+			// if we know there are two values in a chunk, sort with a quick swap.
+			if (chunk[1] < chunk[0]) {
+				std::swap(chunk[0], chunk[1]);
+			}
+
+		}
+
+		// return the sorted smaller chunk to the last recursive call.
+		return chunk;
+	}
+
+}
+
+int *xMerge(int bottom[], int top[], int bottom_length, int top_length) {
 	// bottom length should never be an odd number.
 	// if a chunk of length 1 is remaining, it should always be the top chunk.
 	// ex: last chunk has length of 3, and bottom will have length of 4 but only reflect as 3.
@@ -197,73 +270,5 @@ int &xMerge(int bottom[], int top[], int bottom_length, int top_length) {
 	memcpy(test, destination, sizeof(int) * 16);
 	int i;
 
-	return *destination;
-}
-
-void mergeSort(int *source, int length) {
-	xRecursiveMergeSort(source, length);
-}
-
-int &xRecursiveMergeSort(int *source, int length, int start, int end) {
-
-	int *bottom = nullptr;      // bottom half of split array.
-	int *top = nullptr;         // top half of split array.
-	int *chunk = nullptr;       // the 'working' chunk (bot/top) to be returned recursively.
-	int *sorted = nullptr;      // the final array after it's been sorted.
-
-	// check for default param values.
-	// initialize them to start and end of array length if we are at the bottom of the callstack.
-	if (start == -1) {
-		start = 0;
-	}
-	if (end == 0) {
-		end = length - 1;
-	}
-
-	// Split down the center of the passed array. Then recursively call the bottom/top chunks.
-	// When the mean of the start/end equals the start value, we have a length of <= 1 and we can exit.
-	if (((start + end) / 2) != start) {
-		// move the end position to the left side of the latest middle slice.
-		bottom = &xRecursiveMergeSort(source, (length / 2) - 1, start, (start + end) / 2);
-		// increase start by last chunk length. (end - start) + 1
-		start += ((start + end) / 2) - start + 1;
-		// move the start position to the right side of the latest middle slice.
-		top = &xRecursiveMergeSort(source, length, start, end);
-	}
-
-	// if we have both a valid bottom and top chunk initialized,
-	// then we know we are returning down the call stack and we can begin merging the sorted chunks.
-	if (top && bottom) {
-		// some chunks after merged may be >= 2, so we have calculate how large they are.
-		// Note: using sizeof(chunk) / sizeof(int) was giving me strange results, so I will do they pointer arithmetic thing I did before.
-		sorted = &xMerge(bottom, top, end - start + 1, end - start + 1);
-		// clean up the old chunks after merged and new arr is created.
-		delete[]top;
-		delete[]bottom;
-		return *sorted;  // return the new sorted and merged chunk of memory.
-	}
-		// Keep splitting if we don't have the 2 smallest halves yet.
-	else {
-		// If the length is not an even number, then we will have a chunk leftover of length 1.
-		// Validate and catch this.
-		if (start == end) {             // chunk length of 1
-			chunk = new int[1];
-			chunk[0] = source[start];
-		}
-		else {                          // chunk length of 2
-			chunk = new int[2];
-			chunk[0] = source[start];
-			chunk[1] = source[end];
-
-			// if we know there are two values in a chunk, sort with a quick swap.
-			if (chunk[1] < chunk[0]) {
-				std::swap(chunk[0], chunk[1]);
-			}
-
-		}
-
-		// return the sorted smaller chunk to the last recursive call.
-		return *chunk;
-	}
-
+	return destination;
 }

@@ -30,9 +30,9 @@ void vSiftDownMin(int arr[], int length, int position);
 
 void mergeSort(int *source, int length);
 
-int &xRecursiveMergeSort(int *source, int length, int start = -1, int end = 0);
+int *xRecursiveMergeSort(int *source, int length, int start = -1, int end = 0);
 
-int &xMerge(int bottom[], int top[], int bottom_length, int top_length);
+int *xMerge(int bottom[], int top[], int bottom_length, int top_length);
 
 void quickSort(int arr[], int length);
 
