@@ -67,10 +67,10 @@ private:
 	void vBuildStackInorder(Node *n = nullptr);
 
 	// Returns the input string as as simplified inOrder expression (parenthesis need-only basis)
-	void vBuildStackInorderSimple(Node *n = nullptr);
+	void vInOrderSimple();
 
 	// Sets xOutput to a postFix expression from a stored xInput infix expression
-	void vStrInfixToPostfix(Node *n = nullptr);
+	void vInfixToPostfix(Node *n = nullptr);
 
 public:
 	explicit ParseTree(const std::string &str = "");

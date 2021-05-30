@@ -315,85 +315,71 @@ void ParseTree::vBuildStackInorder(Node *n) {
 
 }
 
-void ParseTree::vBuildStackInorderSimple(Node *n) {
+void ParseTree::vInOrderSimple() {
+	// Copying the variable may save time from calling deque methods each time. Not sure.
+	std::string str = xInput.str();
+	std::string buffer;
 
-	/*	 Note: in some cases, flagging character value as null can be helpful here.
-	       however it probably is not necessary for the leaf nodes as they get deleted progressively
-	       I am keeping it in for consistency and good practice to init/de-init values.*/
-	if (n) {
+	// Iterate through all characters.
+	for (unsigned i = 0; i < str.length(); ++i) {
 
-		if (n->left) {
-			return vBuildStackInorderSimple(n->left);
+		// if space, continue.
+		if (str[i] == SPACE) {
+			continue;
 		}
 
-		if (n == xRoot && n->value) {
-			xStr.push_back(n->value);
-			n->value = std::nullopt;
-			return vBuildStackInorderSimple(xRoot);
-		}
+		// "if L paren.."
+		if (str[i] == PARENTH_L) {
 
-		if (n->value && xIsOperator(*n->value)) {
-			xStr.push_back(n->value);
-			n->value = std::nullopt;
-			return vBuildStackInorderSimple(xRoot);
-		}
+			int op_index = -1;
 
-		// Check if we can peak the parent for node position relationships
-		if (n->head) {
-			if (n == n->head->right && n->value) {
-				// Peak the stack for the type of operator
-				std::optional<char> c = xStr.back();
-				// Check operator priority. If it is addition or subtraction we do not need parenthesis.
-				if (c == PLUS || c == MINUS) {
-					xStr.push_back(n->value);
-					xStr.push_back(std::optional<char>(')'));
-					n->value = std::nullopt;
+			// Create a substring until we reach a ')'
+			for (int j = i; j < str.length(); ++j) {
+				// add whatever values is next
+				buffer += str[j];
+
+				// if operator is found and it's not a parenthesis, save its indice value.
+				if (xIsOperator(str[j]) && str[j] != PARENTH_R && str[j] != PARENTH_L) {
+					op_index = j;
 				}
-				else {
-					xStr.push_back(n->value);
-					n->value = std::nullopt;
+
+				// Check last operator precedence when we hit a right parentheses
+				if (str[j] == PARENTH_R) {
+
+					// guard against no operator being found between parenthesis
+					if (op_index > 0) {
+
+						// if op priority greater than 2 (not plus or minus), then pop off parentheses on substring
+						if (xOperatorPriority(str[op_index]) > 1) {
+							buffer.erase(buffer.begin());
+							buffer.erase(buffer.end() - 1);
+						}
+					}
+
+					// add the substring to the output buffer stream.
+					xOutput << buffer;
+					// update the first iterator and exit second.
+					i = j;
+					// empty the buffer.
+					buffer = "";
+					// exit substring scope
+					break;
 				}
-			}
-		}
 
-		if (n->value && !xIsOperator(*n->value)) {
-			// Check operator priority. If it is addition or subtraction we do not need parenthesis.
-			if (n->value == PLUS || n->value == MINUS) {
-				xStr.push_back(std::optional<char>('('));
-				xStr.push_back(n->value);
-				n->value = std::nullopt;
 			}
-			else {
-				xStr.push_back(n->value);
-				n->value = std::nullopt;
-			}
-		}
 
-		if (n->right) {
-			return vBuildStackInorderSimple(n->right);
-		}
-
-		if (n == xRoot) {
-			xRoot = nullptr;
 		}
 		else {
-			if (n == n->head->left) {
-				n->head->left = nullptr;
-			}
-			if (n == n->head->right) {
-				n->head->right = nullptr;
-			}
-		}
-
-		delete n;
-
-		if (xRoot) {
-			return vBuildStackInorderSimple(xRoot);
+			// append the sequence to the string
+			xOutput << str[i];
 		}
 	}
+
+	std::string s = xOutput.str();
 }
 
-void ParseTree::vStrInfixToPostfix(Node *n) {
+
+void ParseTree::vInfixToPostfix(Node *n) {
 
 	// Copying the variable may save time from calling deque methods each time. Not sure.
 	std::string str = xInput.str();
@@ -406,7 +392,7 @@ void ParseTree::vStrInfixToPostfix(Node *n) {
 			continue;
 		}
 
-		// "if operand.. add to output string
+		// "if operand.. add to output string"
 		if (!xIsOperator(str[i])) {
 			xOutput << str[i];
 			continue;
@@ -431,7 +417,7 @@ void ParseTree::vStrInfixToPostfix(Node *n) {
 				if (xChar != PARENTH_L) {
 					xOutput << xChar;
 					xStr.pop_back(); // removes the actual item
-					continue;
+					break;
 				}
 				else {
 					// else discard and end popping
@@ -469,6 +455,20 @@ void ParseTree::vStrInfixToPostfix(Node *n) {
 			xStr.push_back(str[i]);
 		}
 	}
+
+	while (!xStr.empty()) {
+
+		char c = *xStr.back();
+
+		if (c != PARENTH_L) {
+			xOutput << c;
+		}
+
+		xStr.pop_back();
+	}
+
+	std::string s = xOutput.str();
+
 }
 
 std::string ParseTree::inOrder(bool simplified) {
@@ -483,7 +483,8 @@ std::string ParseTree::inOrder(bool simplified) {
 
 	// Build the stack according to the designator param
 	if (simplified) {
-		vBuildStackInorderSimple(xRoot);
+		vInOrderSimple();
+		return xOutput.str();
 	}
 	else {
 		// Build the xStr stack with inOrder notation.
@@ -582,7 +583,7 @@ void ParseTree::parseInOrder(std::string str) {
 
 	// Build a stack from the input to an inOrder expression.
 	// This will eventually convert the string into a post-order tree.
-	vStrInfixToPostfix();
+	vInfixToPostfix();
 
 	// Pop and add all elements to output buffer.
 	while (!xStr.empty()) {

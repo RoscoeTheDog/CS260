@@ -15,7 +15,7 @@
 #define SPACE ' '
 
 typedef enum {
-    ePLUS,
+    ePLUS = 0,
     eMINUS,
     eMULT,
     eDIV,

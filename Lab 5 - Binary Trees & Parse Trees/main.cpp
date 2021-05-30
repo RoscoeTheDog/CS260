@@ -10,7 +10,7 @@
 
 #include "ParseTree.hpp"
 
-#define TEST_BASE
+//#define TEST_BASE
 #define TEST_ADV
 #define TEST_THINK
 
