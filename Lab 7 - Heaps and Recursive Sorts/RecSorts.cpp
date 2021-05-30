@@ -113,7 +113,7 @@ void vDumpArray(int arr[], int length) {
 }
 
 void mergeSort(int *source, int length) {
-	// I tried like a million different syntaxes trying to just modify the original passed in reference
+	// I tried like a million different ways trying to modify the original passed in reference
 	// but I was not getting anywhere with it. I could not change the reference address with a pointer either.
 	// I resorted just to doing a quick deep copy of the values and then deleting the extra array.
 	int *sorted = xRecursiveMergeSort(source, length);
@@ -235,7 +235,8 @@ int *xMerge(int bottom[], int top[], int bottom_length, int top_length) {
 			if (top[index_2] < bottom[index_1]) {
 				destination[index_0] = top[index_2++];
 				index_0++;
-			} else {
+			}
+			else {
 				if (bottom[index_1] < top[index_2]) {
 					destination[index_0] = bottom[index_1++];
 					index_0++;
@@ -271,4 +272,63 @@ int *xMerge(int bottom[], int top[], int bottom_length, int top_length) {
 	int i;
 
 	return destination;
+}
+
+void vRecursiveQuickSort(int arr[], int start, int end) {
+
+	if (start < end) {
+		int pivot = vPartition(arr, start, end);
+
+		vRecursiveQuickSort(arr, start, pivot - 1);
+		vRecursiveQuickSort(arr, pivot + 1, end);
+	}
+
+}
+
+int vPartition(int arr[], int start, int end) {
+
+	int pivotIndex = start;
+	int pivotElement = arr[start];
+
+	int index = start + 1;
+
+	while (index <= end) {
+		if (arr[index] <= pivotElement) {
+			pivotIndex += 1;
+			std::swap(arr[index], arr[pivotIndex]);
+		}
+		index += 1;
+	}
+
+	std::swap(arr[pivotIndex], arr[start]);
+
+	return pivotIndex;
+}
+
+void quickSort(int *arr, int length) {
+
+	vRecursiveQuickSort(arr, 0, length - 1);
+}
+
+int vRecursiveFindSort(int arr[], int start, int end, int index) {
+
+	int copy[20];
+
+	memcpy(copy, arr, sizeof(int) * 20);
+
+	if (start < end) {
+		int pivot = vPartition(arr, start, end);
+
+		if (end < index) {
+			return arr[index];
+		}
+
+		vRecursiveFindSort(arr, start, pivot - 1, index);
+	}
+
+}
+
+int findNth(int *arr, int length, int index) {
+
+	return vRecursiveFindSort(arr, 0, length - 1, index);
 }

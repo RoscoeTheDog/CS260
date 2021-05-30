@@ -38,5 +38,13 @@ void quickSort(int arr[], int length);
 
 void vDumpArray(int arr[], int length);
 
+void quickSort(int arr[], int length);
+
+void vRecursiveQuickSort(int arr[], int start, int end);
+
+int vPartition(int arr[], int start, int end);
+
+int findNth(int arr[], int length, int index);
+
 
 #endif //LAB_7___HEAPS_AND_RECURSIVE_SORTS_RECSORTS_HPP

@@ -16,10 +16,10 @@
 // TESTHEAPSORT, TESTMERGESORT, TESTQUICKSORT are Advanced Lab
 #define TESTHEAPSORT
 #define TESTMERGESORT
-//#define TESTQUICKSORT
+#define TESTQUICKSORT
 //
 //// TESTFINDNTH is Thinking Problem
-//#define TESTFINDNTH
+#define TESTFINDNTH
 
 #ifdef TESTHEAP
 #include "Heap.hpp"
