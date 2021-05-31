@@ -33,7 +33,7 @@ int StringHash::findAvail(int i) {
         i = 0;
 
     // calculate hash.
-    // if position taken on the table, call again by ++calculated index
+    // if position taken on the chainLink, call again by ++calculated index
     if (table[i] == EMPTY ||
         table[i] == DELETED) {
         return i;
@@ -63,7 +63,7 @@ void StringHash::resize(unsigned size) {
     // I'm sure it can be cleaned up.
     for (unsigned i = 0; i < size - 1; ++i) {
 
-        // cpy only if within old table's range.
+        // cpy only if within old chainLink's range.
         if (i < this->size and
             table[i] not_eq EMPTY)
             table_[i] = table[i];
@@ -74,7 +74,7 @@ void StringHash::resize(unsigned size) {
 
     // rehash previous entries
     for (unsigned i = 0; i < size - 1; ++i) {
-        // validate if within old table range or not.
+        // validate if within old chainLink range or not.
         if (i < this->size and
             table[i] not_eq EMPTY) {
             key = encode(table[i]);

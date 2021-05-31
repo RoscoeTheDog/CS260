@@ -7,11 +7,11 @@
 
 #include <iostream>
 #include "StringHash.hpp"
-#define TEST_BASE // always define this if testing any base
-#define TEST_BASE_FIND
-#define TEST_BASE_REMOVE
-#define TEST_BASE_DISPLAY
-#define TEST_BASE_GROW
+//#define TEST_BASE // always define this if testing any base
+//#define TEST_BASE_FIND
+//#define TEST_BASE_REMOVE
+//#define TEST_BASE_DISPLAY
+//#define TEST_BASE_GROW
 
 #define TEST_ADV // always define this if testing any advanced
 #define TEST_ADV_FIND
@@ -33,7 +33,7 @@ int main()
     const int BASE_SIZE = 5;
     std::string baseWords[BASE_SIZE] = {"apple", "pear", "oak", "pine", "peach"};
     
-    std::cout << "\StringHash tests\n" << std::endl;
+    std::cout << "StringHash tests\n" << std::endl;
 #ifdef TEST_BASE_FIND
     std::cout << "Testing addItem and findItem\n" << std::endl;
     StringHash baseFind;

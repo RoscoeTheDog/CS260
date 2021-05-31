@@ -6,13 +6,15 @@
 #ifndef LAB_4___HASH_TABLES_STRINGHASH_HPP
 #define LAB_4___HASH_TABLES_STRINGHASH_HPP
 
-#define EMPTY "_empty_"
-#define DELETED "_deleted_"
+
 
 #include <cstring>
 #include <sstream>
 #include <cstdio>
 #include <iostream>
+
+const std::string EMPTY = "_empty_";
+const std::string DELETED = "_deleted_";
 
 
 class StringHash {
@@ -25,7 +27,7 @@ private:
 
     // having key be a class member is not necessary but makes code a bit easier to understand.
     int key; // key == the 'weight' of the string in ASCII
-    int ind; // ind == the actual hashed table index of the key.
+    int ind; // ind == the actual hashed chainLink index of the key.
 
 public:
 
