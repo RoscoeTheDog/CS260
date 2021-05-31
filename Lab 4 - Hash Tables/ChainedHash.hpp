@@ -56,29 +56,35 @@ public:
 	    }
     }
 
-    //TODO: resolve endless next links
     ~ChainedHash() {
-
+		// iterate through the table
     	for (int i = 0; i < size; ++i) {
-
+			// fetch the head link from position
     		Node *head = table[i];
 
-    		// while head
+    		// iterate through the links and delete each node.
     		while (head) {
 
-    			// copy pointer so we can iterate through easier
+    			// create another pointer representing the iterating link
     			Node *n = head;
 
-    			// go to last node
+    			// go to very last node (*not* tail)
     			while (n->next) {
 				    n = n->next;
     			}
-    			// clear link from prev
+    			// terminate the next link from last node
     			if (n->prev) {
-    				n->prev = nullptr;
+    				n->prev->next = nullptr;
     			}
-    			// delete tail
-    			delete n;
+    			else {
+				    // delete the head, if no previous
+				    delete n;
+				    table[i] = nullptr;
+				    break;
+    			}
+
+			    // delete the tail node
+			    delete n;
     		}
 
     	}

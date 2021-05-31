@@ -43,7 +43,6 @@ void ChainedHash::addItem(std::string &value) {
 void ChainedHash::removeItem(const std::string &value) {
 
 	key = encode(value);
-
 	index = hash(key);
 
 	Node *n = table[index];
@@ -135,7 +134,7 @@ void ChainedHash::resize(unsigned size) {
 
 	// create new table
 	Node **extended;
-	extended = new Node*[size];
+	extended = new Node *[size];
 	// initialize all Node * to null
 	for (int i = 0; i < size; ++i) {
 		extended[i] = nullptr;
@@ -146,51 +145,32 @@ void ChainedHash::resize(unsigned size) {
 	// update size before rehashing.
 	this->size = size;
 
-	// iterate through the array
+	// iterate through the array (un-extended size)
 	for (int i = 0; i < oldSize; ++i) {
+		// get ptr from table
+		Node *head = table[i];
 
-		// check if table has a valid pointer.
-		if (table[i]) {
+		// check for head, rehash old entry if exists.
+		if (head) {
+			key = encode(head->value);
+			index = hash(key);
+			// also check destination to see if another link happened to exist from a previous rehash.
+			Node *destination = extended[index];
 
-			// get ptr from table
-			Node *copyNode = table[i];
-
-			// rehash each link from head of pointer
-			while (copyNode) {
-
-				key = encode(copyNode->value);
-				index = hash(key);
-
-				// see if any entry exists on the new table index or not.
-				if (extended[index]) {
-
-					// get the head from the new index
-					Node *n = extended[index];
-
-					// find tail
-					while (n) {
-						n = n->next;
-					}
-
-					// copy at the tail
-					n = copyNode;
-				}
-					// if no node exists @ new index beforehand, simply copy to table.
-				else {
-					extended[index] = copyNode;
-				}
-
-				copyNode = copyNode->next;
+			// use linear probing to move the source head to destination head in new array
+			while (destination) {
+				destination = extended[++index];
 			}
 
+			// insert into the new destination array
+			extended[index] = head;
 		}
 
+		// continue until hit the next entry.
 	}
 
 	delete[]table;
 	table = extended;
-	this->size = size;
-
 }
 
 int &ChainedHash::hash(int s) {
